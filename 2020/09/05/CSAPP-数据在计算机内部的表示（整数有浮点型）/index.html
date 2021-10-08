@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maomi-apple.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maomi32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maomi16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-pace-theme-flash.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="计算机系统基础之数据类型，原码、反码、补码的表示和关系，以及整型、浮点型在机器内部的表示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP--数据在计算机内部的表示（整数有浮点型）">
+<meta property="og:url" content="http://yoursite.com/2020/09/05/CSAPP-%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E9%83%A8%E7%9A%84%E8%A1%A8%E7%A4%BA%EF%BC%88%E6%95%B4%E6%95%B0%E6%9C%89%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="Ysupreme">
+<meta property="og:description" content="计算机系统基础之数据类型，原码、反码、补码的表示和关系，以及整型、浮点型在机器内部的表示">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905180909.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181036.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181112.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181246.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181202.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181427.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181320.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181602.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181624.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181644.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181656.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181704.png">
+<meta property="article:published_time" content="2020-09-05T14:47:43.000Z">
+<meta property="article:modified_time" content="2021-07-01T10:14:00.480Z">
+<meta property="article:author" content="黄勇">
+<meta property="article:tag" content="数据表示 计算机系统基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905180909.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/09/05/CSAPP-%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E9%83%A8%E7%9A%84%E8%A1%A8%E7%A4%BA%EF%BC%88%E6%95%B4%E6%95%B0%E6%9C%89%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSAPP--数据在计算机内部的表示（整数有浮点型） | Ysupreme</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ysupreme</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">黄勇的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档<span class="badge">11</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/05/CSAPP-%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E9%83%A8%E7%9A%84%E8%A1%A8%E7%A4%BA%EF%BC%88%E6%95%B4%E6%95%B0%E6%9C%89%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me_inhuda.JPG">
+      <meta itemprop="name" content="黄勇">
+      <meta itemprop="description" content="放他三千裘马去，不寄俗生。唯贪我三枕黄粱梦。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ysupreme">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSAPP--数据在计算机内部的表示（整数有浮点型）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-05 22:47:43" itemprop="dateCreated datePublished" datetime="2020-09-05T22:47:43+08:00">2020-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-01 18:14:00" itemprop="dateModified" datetime="2021-07-01T18:14:00+08:00">2021-07-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">-计算机系统基础</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description">计算机系统基础之数据类型，原码、反码、补码的表示和关系，以及整型、浮点型在机器内部的表示</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一.数据类型"></a>一.数据类型</h1><p>&nbsp;&nbsp;在冯偌依曼体系结构中，程序代码和数据都是以二进制存储的，对计算机系统和硬件本身而言，数据类型的概念并不存在，任何数据在计算机内部都是<strong>0/1序列</strong>。这里讲的数据类型是以C语言为基础的，下面的这张图概括了C语言中主要的数据类型。</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905180909.png" alt="img"></p>
+<p>&nbsp;&nbsp;那么对于一串<strong>0/1序列</strong> 我们怎么知道该数值数据代表的值是多少呢？所以为了确定一个数值数据，我们必须确定数值数据表示的三要素：</p>
+<ol>
+<li>–进位计数制</li>
+<li>–定、浮点表示<br>（解决小数点问题）</li>
+<li>如何用二进制编码<br>（解决正负号问题）</li>
+</ol>
+<p> &nbsp;&nbsp;下面主要来讲一讲整型数据和浮点数据的相关表示。</p>
+<h1 id="二-整型"><a href="#二-整型" class="headerlink" title="二.整型"></a>二.整型</h1><h2 id="1-类别"><a href="#1-类别" class="headerlink" title="1.类别"></a>1.类别</h2><p> 整型数据分为：<strong>无符号整数</strong> 和 <strong>带符号整数</strong><br> 有符号数和无符号数的区别主要在于有没有最高位的符号位，以及由此带来的计算方式的不同。符号位中，0 表示非负数，1 表示负数。<br> 在<strong>32位机器上</strong>long int 为<strong>4个字节</strong>，而在<strong>64位机器上</strong>，long int为<strong>8个字节</strong>！</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181036.png" alt="在这里插入图片描述"></p>
+<h2 id="2-表示范围"><a href="#2-表示范围" class="headerlink" title="2.表示范围"></a>2.表示范围</h2><p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181112.png" alt="在这里插入图片描述"></p>
+<p>可以发现，带符号数的最大值<strong>TMax = 2^(w-1)-1</strong> （w为位数）与最小值<strong>TMin = $-2^（w-1）</strong>， 这两个数的绝对值并不相等，为了弄清楚这个问题，我们必须知道定点数的编码表示。</p>
+<h2 id="3-定点数的编码表示方式"><a href="#3-定点数的编码表示方式" class="headerlink" title="3.定点数的编码表示方式"></a>3.定点数的编码表示方式</h2><h3 id="1-原码"><a href="#1-原码" class="headerlink" title="1.原码"></a>1.原码</h3><p>符号位：<strong>正号</strong>用<strong>0</strong>表示，<strong>负号</strong>用<strong>1</strong>表示，其它数字位代表数值本身的绝对值。<br>采用原码表示，虽然容易理解，但是会带来很多麻烦:</p>
+<ul>
+<li><p>0的表示不唯一，不利于程序员编程；</p>
+</li>
+<li><p>加、减运算方式不；</p>
+</li>
+<li><p>需要额外对符号位进行处理，不利于硬件设计。</p>
+<p>所以，从50年代开始，整数都采用补码表示。浮点数的尾数还是用原码定点小数表示（下面相应部分将会讲到）</p>
+</li>
+</ul>
+<h3 id="2-反码"><a href="#2-反码" class="headerlink" title="2.反码"></a>2.反码</h3><p>&nbsp;&nbsp;如果是正数，则表示方法和原码一样；如果是负数，符号位不变，其余各位取反，则得到这个数字的反码表示形式。（反码很少用到）</p>
+<h3 id="3-补码-模运算"><a href="#3-补码-模运算" class="headerlink" title="3.补码-模运算"></a>3.补码-模运算</h3><h4 id="（1）如何求得补码"><a href="#（1）如何求得补码" class="headerlink" title="（1）如何求得补码"></a>（1）如何求得补码</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;如果是正数，则表示方法和原码一样；如果是负数，则将数字的反码加上1即得到它的补码；</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;举个例子：&nbsp;&nbsp;为了简便，这里只定义位数w=4。</p>
+<ul>
+<li><p>-5的原码是1101；</p>
+</li>
+<li><p>将除符号位的其余位置取反得到反码1010；</p>
+</li>
+<li><p>末尾加1，得补码：1011</p>
+</li>
+</ul>
+<h4 id="（2）补码与真值的关系"><a href="#（2）补码与真值的关系" class="headerlink" title="（2）补码与真值的关系"></a>（2）补码与真值的关系</h4><p>当我们知道一个数的补码，要求它的真值，可以采用以下两种方式：</p>
+<ul>
+<li>（1）<strong>看符号位！</strong> 若符号位为0，则为正数，其值就是后面的数值部分的值；若符号位为1，则为负数，将数值位各位取反，再加1,取结果为负值。<br>&nbsp;&nbsp;&nbsp;&nbsp;举例：0110，其值为0 * 1+1 * 2+1*4=6；<br>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;1110值就等于将110取反再加1的值，即：110—-&gt;001—-&gt;010，所以其值为-2。</li>
+</ul>
+<ul>
+<li>（2）<strong>公式：</strong><br>因为能力有限，只能在word里打出来这个公式，且不能复制过来，只好截图了。<br> 解释一下：w是这个数据的位数，k是从0开始计数的序数，如：第一位的k=0，第二位的k=1,以此类推……<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181246.png" alt="在这里插入图片描述"><br>对于上面的补码1110=- 2^3+(1 * 2+1*4) = -2</li>
+</ul>
+<p>有了这个公式，就可以解开上面提到的那个问题：最大值比最小值的绝对值小1。</p>
+<h4 id="（3）模运算概念："><a href="#（3）模运算概念：" class="headerlink" title="（3）模运算概念："></a>（3）模运算概念：</h4><p>&nbsp;&nbsp;在一个模运算系统中，一个数与它除以“模”后的余数等价！</p>
+<p> &nbsp;&nbsp;&nbsp;&nbsp;举个例子：时钟就是一种模12系统。如果现在是时针指向8点，要将它拨向6点，则有两种拨法：</p>
+<ul>
+<li><p>倒拨2格：8-2=6</p>
+</li>
+<li><p>顺拨10格： 8+10=16；  （mod 12）</p>
+<p>模12系统中：8-2=8+10      &nbsp;&nbsp;(mod 12)</p>
+<pre><code>&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;                        -2=10      &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;(mod 12)
+则称-2是10对模12的补码。</code></pre><h3 id="4-有无符号数的转换"><a href="#4-有无符号数的转换" class="headerlink" title="4.有无符号数的转换"></a>4.有无符号数的转换</h3><p>转换公式：<strong>当TMin&lt; T&lt;0时:U=2^w+T</strong>； (T为补码）</p>
+</li>
+</ul>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181202.png" alt="在这里插入图片描述"></p>
+<p><strong>注意点：</strong> 如果一个表达式既包含有符号数也包含无符号数，那么会被隐式转换成无符号数进行比较 $s=UAdd_w(u,v)=u+v ; mod ; 2^w$</p>
+<h1 id="三-浮点数"><a href="#三-浮点数" class="headerlink" title="三.浮点数"></a>三.浮点数</h1><h2 id="1-IEEE754标准"><a href="#1-IEEE754标准" class="headerlink" title="1.IEEE754标准"></a>1.IEEE754标准</h2><p>在 IEEE 标准中，我们用下面的公式来表达浮点数：</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181427.png" alt="image-20200905181425989"><br>其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181320.png" alt="在这里插入图片描述"></p>
+<p>其中 s 对应着符号位，exp 对应着 E（注意，不一定等于 E，因为位数限制表达能力有限），frac 对应着 M（注意，不一定等于 M，因为位数限制表达能力有限）。不同的位数就代表了不同的表示能力，也就是单精度，双精度，扩展精度的来源。</p>
+<h3 id="规范化值-Normalized-Values"><a href="#规范化值-Normalized-Values" class="headerlink" title="规范化值(Normalized Values)"></a>规范化值(Normalized Values)</h3><p>这里的 E 是一个偏移的值 $E=Exp-Bias$，其中<br>Exp: 是 exp 编码区域的无符号数值<br>Bias：值为 $2^{w-1} - 1$ 的偏移量，其中w 是 exp 编码的位数，也就是说<br>单精度：127（Exp: 1…254, E: -126…127）<br>双精度：1023（Exp: 1…2046, E: -1022…1023）<br>之所以需要采用一个偏移量，是为了保证 exp 编码只需要以无符号数来处理。</p>
+<p>而对于 M，一定是以 1 开头的：也就是 $M=1.xxx…x_2$。其中 xxx 的部分就是 frac 的编码部分，当 frac=000.00 的时候值最小（$M=1.0$），当 frac=111。。。1 的时候值最大（$M=2.0-\epsilon$），也就是说开头的 1 <strong>是免费附送的</strong>，并不需要实际的编码位。</p>
+<p>举个例子，float F = 15213.0;，那么</p>
+<p>$$15213_{10}=11101101101101_2=1.1101101101101_2 \times 2^{13}$$</p>
+<p>于是 frac 部分的值就是小数点后面的数值，而 Exp = E + Bias = 13 + 127 = 140 = $10001100_2$，于是编码出来的浮点数是这样的：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 10001100 11011011011010000000000</p>
+<h3 id="非规范化值-Denormalized-Values"><a href="#非规范化值-Denormalized-Values" class="headerlink" title="非规范化值(Denormalized Values)"></a>非规范化值(Denormalized Values)</h3><p>当 $exp = 000…0$ 的时候，值是非规范化的，意思是，虽然实数轴上原来连续的值会被规范到有限的定值上，但是并些定值之间的间距也是一样的。</p>
+<p>$$v=(-1)^s ; M ; 2^E$$</p>
+<p>和前面不同的是</p>
+<p>$$E = 1 - Bias$$</p>
+<p>而且 $M=0.xxx…x_2$，不是以 1 开头了。</p>
+<p>当 exp=000…0 且 frac = 000…0 时，表示 0，而且因为符号位的缘故，实际上是有 +0 和 -0 两种的。而在 exp=000..0 且 $frac \ne 000…0$ 时，数值是接近 0 的，并且间距是一致的</p>
+<h3 id="特殊值"><a href="#特殊值" class="headerlink" title="特殊值"></a>特殊值</h3><p>还有一种特殊情况，就是 $exp = 111…1$ 时，表示一些特殊值。</p>
+<p>当 exp=111…1 且 frac = 000…0 时，表示 $\infty$，而且因为符号位的缘故，实际上是有 $+\infty$ 和 $-\infty$ 两种的。那些会溢出的操作就会用这个来表示，比如 $1.0/0.0=-1.0/0.0=+\infty;,;1.0/-0.0=-\infty$</p>
+<p>而在 exp=111…1 且 $frac \ne 000…0$ 时，我们认为这不是一个数值（Not-a-Number，NaN），用来表示那些没办法确定的值，比如 $sqrt(-1),\infty-\infty,\infty\times 0$</p>
+<h2 id="2-浮点数精度"><a href="#2-浮点数精度" class="headerlink" title="2.浮点数精度"></a>2.浮点数精度</h2><p>浮点数精度主要是由尾数部分决定的，有效的位数部分越长，其精度越高（单精度浮点数尾数部分部分最高为23位，双精度浮点数最高为51位）。一个0/1序列的浮点数可以准确对应一个小数，而一个小数却不一定能表示成0/1序列<br>61.419998和61.420002是两个可表示数，两者相差0.000004，这之间的数是不可表示的，当输入的数据是一个不可表示数时，机器数将其转换为最邻近的可表示数。<br>看下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	float a;</span><br><span class="line">	printf(&quot;请输入：\n&quot;);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;a);</span><br><span class="line">	printf(&quot;x&#x3D;%f&quot;,a);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试</strong></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181602.png" alt="img"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181624.png" alt="在这里插入图片描述"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181644.png" alt="在这里插入图片描述"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181656.png" alt="在这里插入图片描述"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181704.png" alt="在这里插入图片描述"></p>
+<p>本文已发布在CSDN:<a href="https://blog.csdn.net/qq_44871442/article/details/90613842" target="_blank" rel="noopener">https://blog.csdn.net/qq_44871442/article/details/90613842</a></p>
+<p><strong>参考资料、网站：</strong></p>
+<ul>
+<li><a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/（不周山作品集）" target="_blank" rel="noopener">https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/（不周山作品集）</a></li>
+<li><a href="https://www.icourse163.org/learn/NJU-1001625001?tid=1205931209#/learn/content?type=detail&amp;id=1210291298&amp;cid=1212230667（南京大学开设的“计算机系统基础”系列课程）" target="_blank" rel="noopener">https://www.icourse163.org/learn/NJU-1001625001?tid=1205931209#/learn/content?type=detail&amp;id=1210291298&amp;cid=1212230667（南京大学开设的“计算机系统基础”系列课程）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" rel="tag"># 数据表示 计算机系统基础</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/06/%E3%80%8A%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E2%80%94%E2%80%94%E5%AE%89%E5%8D%93%E3%80%8B%E5%AD%A6%E4%B9%A0-%E4%B8%80%EF%BC%89%EF%BC%88%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84-%E6%97%A5%E5%BF%97%E8%AE%BE%E7%BD%AE-%E6%B4%BB%E5%8A%A8%E5%88%87%E6%8D%A2-%E6%B4%BB%E5%8A%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%8E%A2%E7%A9%B6%EF%BC%89/" rel="prev" title="《第一行代码——安卓》学习(一）">
+      <i class="fa fa-chevron-left"></i> 《第一行代码——安卓》学习(一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/21/Apollo%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A03-Apollo%E7%A1%AC%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B9%B3%E5%8F%B0/" rel="next" title="Apollo进阶学习3-Apollo硬件开发平台">
+      Apollo进阶学习3-Apollo硬件开发平台 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MTEzMC8yNzYxMQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄勇"
+      src="/images/me_inhuda.JPG">
+  <p class="site-author-name" itemprop="name">黄勇</p>
+  <div class="site-description" itemprop="description">放他三千裘马去，不寄俗生。唯贪我三枕黄粱梦。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ysupreme" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ysupreme" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hy1474705581@gmail.com" title="E-Mail → mailto:hy1474705581@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Jerry75817970" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Jerry75817970" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄勇</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">50k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">45 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+  <script type="text/javascript" src="/js/cursor/firework.js"></script>
+</body>
+</html>

@@ -1,0 +1,1166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Apollo学习1-无人驾驶概览+高精度地图</title>
+    <url>/2020/07/15/Apollo%E5%AD%A6%E4%B9%A01-%E6%97%A0%E4%BA%BA%E9%A9%BE%E9%A9%B6%E6%A6%82%E8%A7%88-%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="一-无人驾驶概览"><a href="#一-无人驾驶概览" class="headerlink" title="一.无人驾驶概览"></a>一.无人驾驶概览</h1><h2 id="1-主要研究内容"><a href="#1-主要研究内容" class="headerlink" title="1.主要研究内容"></a>1.主要研究内容</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">无人驾驶车核心组件</span><br><span class="line">软件如何部署运行核心组件</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-Apollo无人驾驶开源平台内容"><a href="#2-Apollo无人驾驶开源平台内容" class="headerlink" title="2.Apollo无人驾驶开源平台内容"></a>2.Apollo无人驾驶开源平台内容</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1）高精度地图</span><br><span class="line">性质：支持几乎所有软件栈的模块</span><br><span class="line">2）定位</span><br><span class="line">实现：激光、雷达、配合高精度地图</span><br><span class="line">3）感知</span><br><span class="line">工具：深度学习</span><br><span class="line">4）预测</span><br><span class="line">方式：递归神经网络</span><br><span class="line">5）规划</span><br><span class="line">内容：如何生成行车轨迹</span><br><span class="line">6）控制</span><br><span class="line">内容：如何执行规划方案</span><br></pre></td></tr></table></figure>
+
+<h2 id="3无人驾驶程度等级"><a href="#3无人驾驶程度等级" class="headerlink" title="3无人驾驶程度等级"></a>3无人驾驶程度等级</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0级：驾驶员完全控制</span><br><span class="line">1级：驾驶员辅助控制，需要充分参与，但可放弃自治系统的控制；</span><br><span class="line">2级：部分自动化，自动控制巡航以及保持车道；</span><br><span class="line">3级：有条件的自动化，人类可以有必要的时候接入</span><br><span class="line">4级：高度自动化，车辆不期望驾驶员介入，可能没有控制装置，但会控制在一定区域内</span><br><span class="line">5级：完全自动化，任何地方完全自主运行</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-无人车核心组成"><a href="#4-无人车核心组成" class="headerlink" title="4 无人车核心组成"></a>4 <strong>无人车核心组成</strong></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.计算机视觉：通过摄像头看清环境</span><br><span class="line">2.传感器融合</span><br><span class="line">	1)通过多种雷达深入、增加了解周遭环境</span><br><span class="line">	2)如：了解车辆运行速度等</span><br><span class="line">3.定位</span><br><span class="line">	1)准确度：一位数厘米精度</span><br><span class="line">4.路径规划</span><br><span class="line">5.控制</span><br><span class="line">	1)对象：油门、刹车等</span><br><span class="line">	2)理想效果：控制路径与规划路径重合</span><br></pre></td></tr></table></figure>
+
+<h2 id="5Apollo团队与架构"><a href="#5Apollo团队与架构" class="headerlink" title="5Apollo团队与架构"></a>5Apollo团队与架构</h2><p> 1.Apollo技术框架层次<br>1）开源软件平台<br>2）云服务平台<br>3）参考车辆平台<br>4）参考硬件平台 </p>
+]]></content>
+      <categories>
+        <category>-Apollo -无人驾驶</category>
+      </categories>
+      <tags>
+        <tag>-Apollo -无人驾驶</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apollo进阶学习3-Apollo硬件开发平台</title>
+    <url>/2020/07/21/Apollo%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A03-Apollo%E7%A1%AC%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[<p>title:<br>date: 2020-07-21 23:26:35<br>tags:<br> -Apollo<br> -无人驾驶<br>categories:<br> -Apollo -无人驾驶</p>
+<h1 id="Apollo硬件开发平台"><a href="#Apollo硬件开发平台" class="headerlink" title="Apollo硬件开发平台"></a>Apollo硬件开发平台</h1><h2 id="1自动驾驶汽车的研发流程"><a href="#1自动驾驶汽车的研发流程" class="headerlink" title="1自动驾驶汽车的研发流程"></a>1自动驾驶汽车的研发流程</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.软件在环：基于仿真和模拟（类似于赛车游戏）</span><br><span class="line">2.硬件在环：基于必要的硬件平台</span><br><span class="line">3.车辆在环：基于车辆执行</span><br><span class="line">4.司机在环：基于实际道路，研究“人-车-路-交通”几个参与物之间的相互关系</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-自动驾驶的硬件系统"><a href="#2-自动驾驶的硬件系统" class="headerlink" title="2.自动驾驶的硬件系统"></a>2.自动驾驶的硬件系统</h2><h6 id="1）自动驾驶分为三大系统："><a href="#1）自动驾驶分为三大系统：" class="headerlink" title="1）自动驾驶分为三大系统："></a>1）自动驾驶分为三大系统：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">感知</span><br><span class="line">决策：所有的一些自动驾驶感知决策控制的算法包含在里面</span><br><span class="line">控制</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200724232310.png" alt="image-20200721195215243"></p>
+<h3 id="2）核心传感器"><a href="#2）核心传感器" class="headerlink" title="2）核心传感器"></a>2）核心传感器</h3><p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200724232322.png" alt="image-20200721195658834"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.摄像头：用于车道线和交通标识牌、红绿灯、行人车辆检测。</span><br><span class="line">	特点:监测信息全面，便宜，但受天气状况影响</span><br><span class="line">	单目摄像头、双目摄像头：双目摄像头，不需要判断障碍物类型，通过两张图片的视觉差去计算，对任意障碍物都能提出警告信息</span><br><span class="line">2.激光雷达：核心原理--ToF(Time of Flight)</span><br><span class="line">	根据扫描原理可分为：同轴旋转、棱镜旋转、MEMS、OPA相关阵、flash的......</span><br><span class="line">3.毫米波雷达：用于交通车辆的检测</span><br><span class="line">	特点：速度快、准确、不受天气状况干扰、无法对车道线识别检测</span><br><span class="line">	基本原理：发射一束电磁波，观察电磁波的回波的摄入的差异，来计算距离和速度</span><br><span class="line">4.组合导航：通过GNSS板卡，接收所有可见的GPS的卫星信号，进行解算和计算，得出自身位置，但受地形影响，需要融合惯导信息</span><br></pre></td></tr></table></figure>
+
+<h3 id="3）对传感器设计的两种理念"><a href="#3）对传感器设计的两种理念" class="headerlink" title="3）对传感器设计的两种理念"></a>3）对传感器设计的两种理念</h3><p>L1、L2怕误检：影响驾车主体的体验</p>
+<p>L3+怕漏检测</p>
+<h3 id="4）制动距离"><a href="#4）制动距离" class="headerlink" title="4）制动距离"></a>4）制动距离</h3><h3 id=""><a href="#" class="headerlink" title=""></a><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200724232340.png" alt="image-20200721201415665"></h3><h3 id="5）传感器发展趋势"><a href="#5）传感器发展趋势" class="headerlink" title="5）传感器发展趋势"></a>5）传感器发展趋势</h3><p>自动驾驶离不开多传感器的融合</p>
+<p>系统做冗余设计，防止单点故障</p>
+<p>MCU：当整体系统失效，MCU最后会发送些操作，到CAN总线上，进行刹车等操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">集中式方案：体积大，功耗高</span><br><span class="line">嵌入式方案</span><br></pre></td></tr></table></figure>
+
+<h3 id="6）半导体发展"><a href="#6）半导体发展" class="headerlink" title="6）半导体发展"></a>6）半导体发展</h3><h3 id="7）自动驾驶的线控系统"><a href="#7）自动驾驶的线控系统" class="headerlink" title="7）自动驾驶的线控系统"></a>7）自动驾驶的线控系统</h3><p><strong>相当于人的手和脚</strong></p>
+<p>主要分为三部分：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">减速、刹车的控制</span><br><span class="line">转向控制</span><br><span class="line">油门加速度的控制</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200724232351.png" alt="image-20200721203326901"></p>
+<h2 id="3-Apollo硬件开发平台"><a href="#3-Apollo硬件开发平台" class="headerlink" title="3.Apollo硬件开发平台"></a>3.Apollo硬件开发平台</h2><p>Apollo平台认证：百度正在使用的一些传感器，提供数据集</p>
+<p>Apollo硬件开发平台认证：在代码层面上的进行过验证，感知模块的数据的采集标注、模型训练还是要由开发者自己完成</p>
+<p>下一步：扩展单元（AXU），以适用更多开发者</p>
+]]></content>
+      <categories>
+        <category>-Apollo -无人驾驶</category>
+      </categories>
+      <tags>
+        <tag>-Apollo -无人驾驶</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apollo学习2-定位感知</title>
+    <url>/2020/07/16/Apollo%E5%AD%A6%E4%B9%A02-%E5%AE%9A%E4%BD%8D%E6%84%9F%E7%9F%A5/</url>
+    <content><![CDATA[<h1 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h1><h2 id="一简介"><a href="#一简介" class="headerlink" title="一简介"></a>一简介</h2><p>1）介绍：让无人驾驶汽车知道自身确切位置的方法</p>
+<p>2）GPS精度：1-3米，甚至更差</p>
+<p>3）<strong>定位最常用的方法：</strong>将汽车传感器看到的内容与高精度地图上所显示的内容（地标）进行比较，必须能够在自身坐标系和地图坐标系之间转换数据</p>
+<p>还有其他常用方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GNSS </span><br><span class="line">RTK</span><br><span class="line">惯性导航</span><br><span class="line">LiDAR定位</span><br><span class="line">视觉定位</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二其他定位方法"><a href="#二其他定位方法" class="headerlink" title="二其他定位方法"></a>二其他定位方法</h2><h3 id="1GNSS-RTK"><a href="#1GNSS-RTK" class="headerlink" title="1GNSS RTK"></a>1GNSS RTK</h3><p>1）三角测量</p>
+<p>​    但是这里不是使用与地标的距离，而是与卫星之间的距离</p>
+<p>2）GNSS:全球导航卫星系统——GPS最广泛</p>
+<p>GPS三部分组成：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">卫星</span><br><span class="line">控制站：监视和控制卫星</span><br><span class="line">GPS接收器：存在于各种设备，每次至少检测到四颗GPS卫星</span><br></pre></td></tr></table></figure>
+
+<p>3）不直接测量距离，而是测量时间：Distance = c * Time</p>
+<p>时间测量需要很高的精度，为了进一步减少误差，可以使用实时运动定位（RTK)，RTK的基站知道自身的准确位置，但也通过GPS测量位置，来获得误差，再将这个误差传给其他GPS接收器，已调整位置计算</p>
+<p>4）GPS缺点：受地形影响导致信号差；更新频率低</p>
+<h3 id="2惯性导航"><a href="#2惯性导航" class="headerlink" title="2惯性导航"></a>2惯性导航</h3><p>1）给定速度、位置、时间：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">s&#39; &#x3D; s +v*t</span><br></pre></td></tr></table></figure>
+
+<p>2)给定速度、加速度、位置、时间：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">s&#39; &#x3D; s +v*t +(a*t^2)&#x2F;2</span><br></pre></td></tr></table></figure>
+
+<p>测量加速度：三轴加速计的传感器、陀螺仪的传感器</p>
+<p>这两个都是惯性测量单元（IMU)的主要部件，IMU的频率非常高，因此可以提供接近实时的位置</p>
+<p>3）缺点：误差随时间的增加而增加</p>
+<p>4）因此可以GPS与IMU结合：IMU弥补GPS更新频率低的缺点，但是在某些地形，GPS无信号还是不能解决</p>
+<h3 id="3激光雷达定位"><a href="#3激光雷达定位" class="headerlink" title="3激光雷达定位"></a>3激光雷达定位</h3><p>1）利用激光雷达，可以通过点云匹配来对汽车定位：通过激光雷达传感器的数据与预先存在的高精度地图连续匹配，通过比较，可以获知全球位置和行驶方向</p>
+<p>2）有许多算法可以用于匹配点云：</p>
+<p>迭代最近点（IPC）：通过点云旋转和平移最大限度地降低这一平均距离误差</p>
+<p>滤波算法：一种LiDAR定位方法,消除冗余信息，在地图上找到最可能的车辆位置</p>
+<p>3）Appollo使用了直方图滤波算法，又被称为误差平方和算法（SSD)</p>
+<p><img src="C:%5CUsers%5C14747%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200716185953413.png" alt="image-20200716185953413"></p>
+<p>4）卡尔曼滤波：也是一种LiDAR定位方法 ：用过去的位置状态和新的传感器测量结果来预测当前状态</p>
+<p>一部分先根据之前状态和对移动距离和方向的估计来预测新位置，另一部分通过（同样不完美）传感器测量位置并加以纠正，然后使用概率则将二者结合起来 </p>
+<p>​    优点：稳定性高</p>
+<p>​    缺点：难以构建高精度地图</p>
+<h3 id="4视觉定位"><a href="#4视觉定位" class="headerlink" title="4视觉定位"></a>4视觉定位</h3><p>常使用摄像头图像与其他传感器数据相结合进行定位。比如有粒子滤波，通过持续观察结果、概率和地图来确定最可能的位置，通常对车道线进行拍照来作比对匹配</p>
+<p>优点：图像数据容易获得 </p>
+<p>缺点：缺乏三维信息和对三维地图的依赖</p>
+<h2 id="三Apollo定位解决方案"><a href="#三Apollo定位解决方案" class="headerlink" title="三Apollo定位解决方案"></a>三Apollo定位解决方案</h2><p>使用基于GPS、IMU和激光雷达的多传感器融合 定位系统，利用了不同传感器的互补优势，提高 了稳定性和准确性</p>
+<p>定位模块依赖于IMU、GPS、激光雷达、雷达和 高精度地图，同时支持GNSS定位和LiDAR定位，</p>
+<p>GNSS输出位置和速度信息，LiDAR输出位置和行 进方向信息</p>
+<p>融合框架通过卡尔曼滤波将这些输出结合在一 起，建立在两步预测测量周期上，其中惯性导航 解决方案拥有卡尔曼滤波的预测步骤，GNSS和 LiDAR用于卡尔曼滤波的测量结果更新步骤</p>
+<h1 id="感知"><a href="#感知" class="headerlink" title="感知"></a>感知</h1><h2 id="一简介-1"><a href="#一简介-1" class="headerlink" title="一简介"></a>一简介</h2><p>感知是无人驾驶技术中十分重要的一环，一般可 以用静态摄像头和其他传感器来感知环境，需要 用到大量计算机视觉技术，这里最广泛使用的是 CNN卷积神经网络</p>
+<h2 id="二算机视觉"><a href="#二算机视觉" class="headerlink" title="二算机视觉"></a>二算机视觉</h2><p>1)计算机视觉是指计算机看待和理解世界的方式</p>
+<p>2)感知的4个核心任务 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">检测 找出物体在环境中的位置 </span><br><span class="line">分类 明确对象是什么 </span><br><span class="line">跟踪 随时间的推移观察移动物体 </span><br><span class="line">语义分割 将图像中的每个像素与语义类别进行匹配</span><br></pre></td></tr></table></figure>
+
+<p>3)实现流程 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.计算机接受类似摄像头等成像设备的输入 </span><br><span class="line">2.对输入图像做预处理 </span><br><span class="line">3.提取特征 </span><br><span class="line">4.分类模型，使用特征来做分类</span><br></pre></td></tr></table></figure>
+
+<p>4)图像种类 </p>
+<p>摄像头图像 </p>
+<p>LiDAR图像 </p>
+<p>…</p>
+<h2 id="三人工智能方面知识"><a href="#三人工智能方面知识" class="headerlink" title="三人工智能方面知识"></a>三人工智能方面知识</h2><p>1）机器学习：是使用特殊算法训练计算机从数据中学习的计算机科学领域，涉及使用数据和相关的真值标记来 进行模型训练。 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">监督式学习 使用标记数据 </span><br><span class="line">无监督学习 使用未标记数据，机器自行进行分类判断 </span><br><span class="line">半监督式学习 将监督学习和无监督学习的特点结合在一起，使用少量的标记数据和大量的未标记数据来训练模型 </span><br><span class="line">强化学习 允许模型通过尝试许多不同的方法来解决问题，然后衡量哪种方法最为成功，最终计算机会得到一个最适应环境的解决方案</span><br></pre></td></tr></table></figure>
+
+<p>2）神经网络 </p>
+]]></content>
+      <categories>
+        <category>-Apollo -无人驾驶</category>
+      </categories>
+      <tags>
+        <tag>-Apollo -无人驾驶</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSAPP--数据在计算机内部的表示（整数有浮点型）</title>
+    <url>/2020/09/05/CSAPP-%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E9%83%A8%E7%9A%84%E8%A1%A8%E7%A4%BA%EF%BC%88%E6%95%B4%E6%95%B0%E6%9C%89%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一.数据类型"></a>一.数据类型</h1><p>&nbsp;&nbsp;在冯偌依曼体系结构中，程序代码和数据都是以二进制存储的，对计算机系统和硬件本身而言，数据类型的概念并不存在，任何数据在计算机内部都是<strong>0/1序列</strong>。这里讲的数据类型是以C语言为基础的，下面的这张图概括了C语言中主要的数据类型。</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905180909.png" alt="img"></p>
+<p>&nbsp;&nbsp;那么对于一串<strong>0/1序列</strong> 我们怎么知道该数值数据代表的值是多少呢？所以为了确定一个数值数据，我们必须确定数值数据表示的三要素：</p>
+<ol>
+<li>–进位计数制</li>
+<li>–定、浮点表示<br>（解决小数点问题）</li>
+<li>如何用二进制编码<br>（解决正负号问题）</li>
+</ol>
+<p> &nbsp;&nbsp;下面主要来讲一讲整型数据和浮点数据的相关表示。</p>
+<h1 id="二-整型"><a href="#二-整型" class="headerlink" title="二.整型"></a>二.整型</h1><h2 id="1-类别"><a href="#1-类别" class="headerlink" title="1.类别"></a>1.类别</h2><p> 整型数据分为：<strong>无符号整数</strong> 和 <strong>带符号整数</strong><br> 有符号数和无符号数的区别主要在于有没有最高位的符号位，以及由此带来的计算方式的不同。符号位中，0 表示非负数，1 表示负数。<br> 在<strong>32位机器上</strong>long int 为<strong>4个字节</strong>，而在<strong>64位机器上</strong>，long int为<strong>8个字节</strong>！</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181036.png" alt="在这里插入图片描述"></p>
+<h2 id="2-表示范围"><a href="#2-表示范围" class="headerlink" title="2.表示范围"></a>2.表示范围</h2><p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181112.png" alt="在这里插入图片描述"></p>
+<p>可以发现，带符号数的最大值<strong>TMax = 2^(w-1)-1</strong> （w为位数）与最小值<strong>TMin = $-2^（w-1）</strong>， 这两个数的绝对值并不相等，为了弄清楚这个问题，我们必须知道定点数的编码表示。</p>
+<h2 id="3-定点数的编码表示方式"><a href="#3-定点数的编码表示方式" class="headerlink" title="3.定点数的编码表示方式"></a>3.定点数的编码表示方式</h2><h3 id="1-原码"><a href="#1-原码" class="headerlink" title="1.原码"></a>1.原码</h3><p>符号位：<strong>正号</strong>用<strong>0</strong>表示，<strong>负号</strong>用<strong>1</strong>表示，其它数字位代表数值本身的绝对值。<br>采用原码表示，虽然容易理解，但是会带来很多麻烦:</p>
+<ul>
+<li><p>0的表示不唯一，不利于程序员编程；</p>
+</li>
+<li><p>加、减运算方式不；</p>
+</li>
+<li><p>需要额外对符号位进行处理，不利于硬件设计。</p>
+<p>所以，从50年代开始，整数都采用补码表示。浮点数的尾数还是用原码定点小数表示（下面相应部分将会讲到）</p>
+</li>
+</ul>
+<h3 id="2-反码"><a href="#2-反码" class="headerlink" title="2.反码"></a>2.反码</h3><p>&nbsp;&nbsp;如果是正数，则表示方法和原码一样；如果是负数，符号位不变，其余各位取反，则得到这个数字的反码表示形式。（反码很少用到）</p>
+<h3 id="3-补码-模运算"><a href="#3-补码-模运算" class="headerlink" title="3.补码-模运算"></a>3.补码-模运算</h3><h4 id="（1）如何求得补码"><a href="#（1）如何求得补码" class="headerlink" title="（1）如何求得补码"></a>（1）如何求得补码</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;如果是正数，则表示方法和原码一样；如果是负数，则将数字的反码加上1即得到它的补码；</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;举个例子：&nbsp;&nbsp;为了简便，这里只定义位数w=4。</p>
+<ul>
+<li><p>-5的原码是1101；</p>
+</li>
+<li><p>将除符号位的其余位置取反得到反码1010；</p>
+</li>
+<li><p>末尾加1，得补码：1011</p>
+</li>
+</ul>
+<h4 id="（2）补码与真值的关系"><a href="#（2）补码与真值的关系" class="headerlink" title="（2）补码与真值的关系"></a>（2）补码与真值的关系</h4><p>当我们知道一个数的补码，要求它的真值，可以采用以下两种方式：</p>
+<ul>
+<li>（1）<strong>看符号位！</strong> 若符号位为0，则为正数，其值就是后面的数值部分的值；若符号位为1，则为负数，将数值位各位取反，再加1,取结果为负值。<br>&nbsp;&nbsp;&nbsp;&nbsp;举例：0110，其值为0 * 1+1 * 2+1*4=6；<br>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;1110值就等于将110取反再加1的值，即：110—-&gt;001—-&gt;010，所以其值为-2。</li>
+</ul>
+<ul>
+<li>（2）<strong>公式：</strong><br>因为能力有限，只能在word里打出来这个公式，且不能复制过来，只好截图了。<br> 解释一下：w是这个数据的位数，k是从0开始计数的序数，如：第一位的k=0，第二位的k=1,以此类推……<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181246.png" alt="在这里插入图片描述"><br>对于上面的补码1110=- 2^3+(1 * 2+1*4) = -2</li>
+</ul>
+<p>有了这个公式，就可以解开上面提到的那个问题：最大值比最小值的绝对值小1。</p>
+<h4 id="（3）模运算概念："><a href="#（3）模运算概念：" class="headerlink" title="（3）模运算概念："></a>（3）模运算概念：</h4><p>&nbsp;&nbsp;在一个模运算系统中，一个数与它除以“模”后的余数等价！</p>
+<p> &nbsp;&nbsp;&nbsp;&nbsp;举个例子：时钟就是一种模12系统。如果现在是时针指向8点，要将它拨向6点，则有两种拨法：</p>
+<ul>
+<li><p>倒拨2格：8-2=6</p>
+</li>
+<li><p>顺拨10格： 8+10=16；  （mod 12）</p>
+<p>模12系统中：8-2=8+10      &nbsp;&nbsp;(mod 12)</p>
+<pre><code>&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;                        -2=10      &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;(mod 12)
+则称-2是10对模12的补码。</code></pre><h3 id="4-有无符号数的转换"><a href="#4-有无符号数的转换" class="headerlink" title="4.有无符号数的转换"></a>4.有无符号数的转换</h3><p>转换公式：<strong>当TMin&lt; T&lt;0时:U=2^w+T</strong>； (T为补码）</p>
+</li>
+</ul>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181202.png" alt="在这里插入图片描述"></p>
+<p><strong>注意点：</strong> 如果一个表达式既包含有符号数也包含无符号数，那么会被隐式转换成无符号数进行比较 $s=UAdd_w(u,v)=u+v ; mod ; 2^w$</p>
+<h1 id="三-浮点数"><a href="#三-浮点数" class="headerlink" title="三.浮点数"></a>三.浮点数</h1><h2 id="1-IEEE754标准"><a href="#1-IEEE754标准" class="headerlink" title="1.IEEE754标准"></a>1.IEEE754标准</h2><p>在 IEEE 标准中，我们用下面的公式来表达浮点数：</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181427.png" alt="image-20200905181425989"><br>其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181320.png" alt="在这里插入图片描述"></p>
+<p>其中 s 对应着符号位，exp 对应着 E（注意，不一定等于 E，因为位数限制表达能力有限），frac 对应着 M（注意，不一定等于 M，因为位数限制表达能力有限）。不同的位数就代表了不同的表示能力，也就是单精度，双精度，扩展精度的来源。</p>
+<h3 id="规范化值-Normalized-Values"><a href="#规范化值-Normalized-Values" class="headerlink" title="规范化值(Normalized Values)"></a>规范化值(Normalized Values)</h3><p>这里的 E 是一个偏移的值 $E=Exp-Bias$，其中<br>Exp: 是 exp 编码区域的无符号数值<br>Bias：值为 $2^{w-1} - 1$ 的偏移量，其中w 是 exp 编码的位数，也就是说<br>单精度：127（Exp: 1…254, E: -126…127）<br>双精度：1023（Exp: 1…2046, E: -1022…1023）<br>之所以需要采用一个偏移量，是为了保证 exp 编码只需要以无符号数来处理。</p>
+<p>而对于 M，一定是以 1 开头的：也就是 $M=1.xxx…x_2$。其中 xxx 的部分就是 frac 的编码部分，当 frac=000.00 的时候值最小（$M=1.0$），当 frac=111。。。1 的时候值最大（$M=2.0-\epsilon$），也就是说开头的 1 <strong>是免费附送的</strong>，并不需要实际的编码位。</p>
+<p>举个例子，float F = 15213.0;，那么</p>
+<p>$$15213_{10}=11101101101101_2=1.1101101101101_2 \times 2^{13}$$</p>
+<p>于是 frac 部分的值就是小数点后面的数值，而 Exp = E + Bias = 13 + 127 = 140 = $10001100_2$，于是编码出来的浮点数是这样的：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 10001100 11011011011010000000000</p>
+<h3 id="非规范化值-Denormalized-Values"><a href="#非规范化值-Denormalized-Values" class="headerlink" title="非规范化值(Denormalized Values)"></a>非规范化值(Denormalized Values)</h3><p>当 $exp = 000…0$ 的时候，值是非规范化的，意思是，虽然实数轴上原来连续的值会被规范到有限的定值上，但是并些定值之间的间距也是一样的。</p>
+<p>$$v=(-1)^s ; M ; 2^E$$</p>
+<p>和前面不同的是</p>
+<p>$$E = 1 - Bias$$</p>
+<p>而且 $M=0.xxx…x_2$，不是以 1 开头了。</p>
+<p>当 exp=000…0 且 frac = 000…0 时，表示 0，而且因为符号位的缘故，实际上是有 +0 和 -0 两种的。而在 exp=000..0 且 $frac \ne 000…0$ 时，数值是接近 0 的，并且间距是一致的</p>
+<h3 id="特殊值"><a href="#特殊值" class="headerlink" title="特殊值"></a>特殊值</h3><p>还有一种特殊情况，就是 $exp = 111…1$ 时，表示一些特殊值。</p>
+<p>当 exp=111…1 且 frac = 000…0 时，表示 $\infty$，而且因为符号位的缘故，实际上是有 $+\infty$ 和 $-\infty$ 两种的。那些会溢出的操作就会用这个来表示，比如 $1.0/0.0=-1.0/0.0=+\infty;,;1.0/-0.0=-\infty$</p>
+<p>而在 exp=111…1 且 $frac \ne 000…0$ 时，我们认为这不是一个数值（Not-a-Number，NaN），用来表示那些没办法确定的值，比如 $sqrt(-1),\infty-\infty,\infty\times 0$</p>
+<h2 id="2-浮点数精度"><a href="#2-浮点数精度" class="headerlink" title="2.浮点数精度"></a>2.浮点数精度</h2><p>浮点数精度主要是由尾数部分决定的，有效的位数部分越长，其精度越高（单精度浮点数尾数部分部分最高为23位，双精度浮点数最高为51位）。一个0/1序列的浮点数可以准确对应一个小数，而一个小数却不一定能表示成0/1序列<br>61.419998和61.420002是两个可表示数，两者相差0.000004，这之间的数是不可表示的，当输入的数据是一个不可表示数时，机器数将其转换为最邻近的可表示数。<br>看下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	float a;</span><br><span class="line">	printf(&quot;请输入：\n&quot;);</span><br><span class="line">	scanf(&quot;%f&quot;,&amp;a);</span><br><span class="line">	printf(&quot;x&#x3D;%f&quot;,a);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试</strong></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181602.png" alt="img"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181624.png" alt="在这里插入图片描述"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181644.png" alt="在这里插入图片描述"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181656.png" alt="在这里插入图片描述"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200905181704.png" alt="在这里插入图片描述"></p>
+<p>本文已发布在CSDN:<a href="https://blog.csdn.net/qq_44871442/article/details/90613842" target="_blank" rel="noopener">https://blog.csdn.net/qq_44871442/article/details/90613842</a></p>
+<p><strong>参考资料、网站：</strong></p>
+<ul>
+<li><a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/（不周山作品集）" target="_blank" rel="noopener">https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/（不周山作品集）</a></li>
+<li><a href="https://www.icourse163.org/learn/NJU-1001625001?tid=1205931209#/learn/content?type=detail&amp;id=1210291298&amp;cid=1212230667（南京大学开设的“计算机系统基础”系列课程）" target="_blank" rel="noopener">https://www.icourse163.org/learn/NJU-1001625001?tid=1205931209#/learn/content?type=detail&amp;id=1210291298&amp;cid=1212230667（南京大学开设的“计算机系统基础”系列课程）</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>-计算机系统基础</category>
+      </categories>
+      <tags>
+        <tag>数据表示 计算机系统基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux操作系统学习笔记(一)</title>
+    <url>/2020/09/08/Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)/</url>
+    <content><![CDATA[<h1 id="一-认识操作系统"><a href="#一-认识操作系统" class="headerlink" title="一.认识操作系统"></a>一.认识操作系统</h1><p>1.从使用者的角度看，操作系统使得计算机易于使用；</p>
+<p>在Linux操作系统下，拷贝文件的操作：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;home&#x2F;TEST &#x2F;mkdir&#x2F;test</span><br></pre></td></tr></table></figure>
+
+<p>用户只需要使用这条命令，就可以把home目录下的TEST拷贝到mkdir目录下，并命名为test</p>
+<p>如果没有操作系统，就必须指明数据存放的物理位置（如哪个柱面，哪个扇区……),还有复杂的I/O操作……</p>
+<p>ps：<font color=red>在CHS模式下，磁盘容量可以表示为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">柱面*磁头每柱面*扇区每磁头*512字节</span><br></pre></td></tr></table></figure>
+
+
+
+</font>
+
+<p>2.从程序员的角度看，操作系统把软件开发人员与硬件打交道的繁琐事务中解放出来；</p>
+<p>3.从设计者的角度看，有了操作系统，就可以方便的对计算机系统中的各种软硬件资源进行有效的管理</p>
+<p>操作系统是一个庞大的系统软件。其设计目标有两个：</p>
+<p>1）尽可能地方便用户使用计算机，</p>
+<p>2）让各种软件资源和硬件资源高效而协调地运转起来。</p>
+<p>从设计者的角度考虑，一个操作系统必须包含以下几部分</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1）操作系统接口</span><br><span class="line">2）内存管理</span><br><span class="line">3）CPU管理</span><br><span class="line">4）设备管理</span><br><span class="line">5）文件管理</span><br></pre></td></tr></table></figure>
+
+
+
+<p>4.操作系统组成</p>
+<p>操作系统=内核+系统程序</p>
+<p>……</p>
+<h1 id="二-开放源代码的UNIX-Linux操作系统"><a href="#二-开放源代码的UNIX-Linux操作系统" class="headerlink" title="二.开放源代码的UNIX/Linux操作系统"></a>二.开放源代码的UNIX/Linux操作系统</h1><h2 id="1-单内核结构和微内核结构"><a href="#1-单内核结构和微内核结构" class="headerlink" title="1.单内核结构和微内核结构"></a>1.单内核结构和微内核结构</h2><p><font color=red>Linux内核被设计成单内核结构,，这是相对于微内核而言的</font></p>
+<p>1）单内核结构（Monolithic kernel)：是面向结构设计的，从整体上把内核作为一个大过程来实现，而进程管理、内存管理等是其中一个模块，模块之间可以直接调用相关函数。效率高、紧凑性强。</p>
+<p>（以后补图片）</p>
+<p>2）微内核结构（Microkernel kernel）：是一种功能更贴近硬件的核心软件，它一般仅包括基本的内存管理、同步原语、进程间通信机制、I/O操作和终端管理，这样有利于提高可扩展性和可移植性。但上层模块之间需要更高的通信开销。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>-[操作系统] -[Linux]</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《第一行代码——安卓》学习(二）</title>
+    <url>/2020/09/09/%E5%AE%89%E5%8D%93%E2%80%94%E2%80%94%E5%AE%89%E5%8D%93%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E8%A7%A3%E6%9E%90%E3%80%81%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="一-安卓简介"><a href="#一-安卓简介" class="headerlink" title="一.安卓简介"></a>一.安卓简介</h1><h2 id="1-系统架构"><a href="#1-系统架构" class="headerlink" title="1.系统架构"></a>1.系统架构</h2><p>可以分为四层，Linux内核层、系统运行库层、应用框架层和应用层</p>
+<h2 id="2-Android应用开发特色"><a href="#2-Android应用开发特色" class="headerlink" title="2.Android应用开发特色"></a>2.Android应用开发特色</h2><p>1）四大组件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">活动（Activity）</span><br><span class="line">服务（Service）</span><br><span class="line">广播接收器（Broadcast Receiver）</span><br><span class="line">内容提供器(Content Provider)</span><br></pre></td></tr></table></figure>
+
+<p>2）丰富的系统控件</p>
+<p>3）SQLite数据库</p>
+<p>4）强大的多媒体</p>
+<p>5）地理位置定位：LBS潜力无限</p>
+<h1 id="二-搭建开发环境"><a href="#二-搭建开发环境" class="headerlink" title="二.搭建开发环境"></a>二.搭建开发环境</h1><p>需要JDK、Android SDK、Android Studio</p>
+<h1 id="三-第一个Android项目"><a href="#三-第一个Android项目" class="headerlink" title="三.第一个Android项目"></a>三.第一个Android项目</h1><h2 id="1-创建helloword项目"><a href="#1-创建helloword项目" class="headerlink" title="1.创建helloword项目"></a>1.创建helloword项目</h2><p>Android4.0以上的系统已经占据了超过98％的 Android市场份额，因此我们将 Minimum SdK指定成API15就可以了。</p>
+<h2 id="2-模拟器或者实体机"><a href="#2-模拟器或者实体机" class="headerlink" title="2.模拟器或者实体机"></a>2.模拟器或者实体机</h2><h2 id="3-Android程序结构解析"><a href="#3-Android程序结构解析" class="headerlink" title="3.Android程序结构解析"></a>3.Android程序结构解析</h2><p>左上角可以切换项目结构模式,改成Project形式</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200908174030.png" alt="image-20200908174028582"></p>
+<h4 id="1）-gradle和-idea"><a href="#1）-gradle和-idea" class="headerlink" title="1）.gradle和.idea"></a>1）.gradle和.idea</h4><p>这两个目录下放置的都是 Android Studio自动生成的一些文件，我们无须关心，也不要去手</p>
+<p>动编辑。</p>
+<h4 id="2）app"><a href="#2）app" class="headerlink" title="2）app"></a>2）app</h4><p>项目中的代码、资源等内容几乎都是放置在这个目录下的，我们后面的开发工作也基本都是</p>
+<p>在这个目录下进行的。</p>
+<h4 id="3）build"><a href="#3）build" class="headerlink" title="3）build"></a>3）build</h4><p>这个目录不需要过多关心，它主要包含了一些在编译时自动生成的文件。</p>
+<h4 id="4）-gradle"><a href="#4）-gradle" class="headerlink" title="4） gradle"></a>4） gradle</h4><p>这个目录下包含了 gradle wrapper的配置文件，使用 gradle wrapper.方式不需要提前将 gradle下载好，而是会自动根据本地的缓存情况决定是否需要联网下载 gradle。 Android Studio默认没有启用 gradle wrapper的方式，如果需要打开，可以点击 Android Studio导航栏→ FileSettings→Buid，Execution， Deployment（ Gradle，进行配置更改</p>
+<h4 id="5）-gitignore"><a href="#5）-gitignore" class="headerlink" title="5）.gitignore"></a>5）.gitignore</h4><p>这个文件是用来将指定的目录或文件排除在版本控制之外的，关于版本控制,将在第5章</p>
+<p>中开始正式的学习。</p>
+<h4 id="6）-build-gradle"><a href="#6）-build-gradle" class="headerlink" title="6）.build gradle"></a>6）.build gradle</h4><p>这是项目全局的 gradle构建脚本，通常这个文件中的内容是不需要修改的。稍后我们将会详</p>
+<p>细分析 gradle构建脚本中的具体内容。</p>
+<h4 id="7）gradle-properties"><a href="#7）gradle-properties" class="headerlink" title="7）gradle. properties"></a>7）gradle. properties</h4><p>这个文件是全局的 gradle配置文件，在这里配置的属性将会影响到项目中所有的 gradle编译</p>
+<p>脚本。</p>
+<h4 id="8）-grades和-gradlew-bat"><a href="#8）-grades和-gradlew-bat" class="headerlink" title="8） grades和 gradlew bat"></a>8） grades和 gradlew bat</h4><p>这两个文件是用来在命令行界面中执行 gradle命令的，其中 gradlew是在 Linux或Mac系统</p>
+<p>中使用的， gradlew.bat是在 Windows系统中使用的。</p>
+<h4 id="9）HelloWorld-iml"><a href="#9）HelloWorld-iml" class="headerlink" title="9）HelloWorld. iml"></a>9）HelloWorld. iml</h4><p>m1文件是所有 IntelliJ iDea项目都会自动生成的一个文件（ Android Studio是基于 Intellij</p>
+<p>IDEA开发的），用于标识这是一个 ntelliJ idea项目，我们不需要修改这个文件中的任何内容。</p>
+<h4 id="10）-local-properties"><a href="#10）-local-properties" class="headerlink" title="10） local properties"></a>10） local properties</h4><p>这个文件用于指定本机中的 Android SDK路径，通常内容都是自动生成的，我们并不需要修改。除非你本机中的 Android SDK位置发生了变化，那么就将这个文件中的路径改成新的位置即可。</p>
+<h4 id="11）settings-gradle"><a href="#11）settings-gradle" class="headerlink" title="11）settings. gradle"></a>11）settings. gradle</h4><p>这个文件用于指定项目中所有引入的模块。由于 Hello world项目中就只有一个app模块，因此该文件中也就只引入了app这一个模块。通常情况下模块的引入都是自动完成的，需要我们手动去修改这个文件的场景可能比较少。</p>
+<h3 id="app目录详解"><a href="#app目录详解" class="headerlink" title="app目录详解"></a><strong>app目录详解</strong></h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.build：编译时自动生成的文件，无需过多关心</span><br><span class="line">2.libs：存a放jar包文件</span><br><span class="line">3.androidTest：此处是用来编写 Android test测试用例的，可以对项目进行一些自动化测试。</span><br><span class="line">4.java:放置java代码</span><br><span class="line">5.res：在项目中使用到的所有图片、布局、字符串等资源都要存放在这个目录下。</span><br><span class="line">6.AndroidManitest.xml：整个 Android项目的配置文件，你在程序中定义的所有四大组件都需要在这个文件里注册，另外还可以在这个文件中给应用程序添加权限声明。</span><br><span class="line">7.test:此处是用来编写 Unit Test测试用例的，是对项目进行自动化测试的另一种方式。</span><br><span class="line">8..gitignore:这个文件用于将app模块内的指定的目录或文件排除在版本控制之外，作用和外层的 gitignore文件类似。</span><br><span class="line">9.app.iml:IntelliJ IDEA项目自动生成的文件，我们不需要关心或修改这个文件中的内容。</span><br><span class="line">10.build gradle:这是ap模块的 gradle构建脚本，这个文件中会指定很多项目构建相关的配置。</span><br><span class="line">11.proguard-rules.pro:这个文件用于指定项目代码的混淆规则，当代码开发完成后打成安装包文件，如果不希望代码被别人破解，通常会将代码进行混淆，从而让破解者难以阅读。</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200908180306.png" alt="image-20200908180304841"></p>
+<p>基本的语法就是上面两种</p>
+<h3 id="详解build-gradle"><a href="#详解build-gradle" class="headerlink" title="详解build.gradle"></a>详解build.gradle</h3><p>Android Studio是采用 Gradle来构建项目的。 Gradle是一个非常先进的项构建工具，它使用了一种基于 Groovy的领域特定语言（DSL）来声明项目设置，摒弃了传统基于XML（如Ant和 Maven）的各种烦琐配置。</p>
+<h4 id="1-外层的build-gradle"><a href="#1-外层的build-gradle" class="headerlink" title="1.外层的build.gradle"></a>1.外层的build.gradle</h4><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这些代码都是自动生成的</span></span><br><span class="line">buildscript &#123;</span><br><span class="line">    </span><br><span class="line">    repositories &#123;</span><br><span class="line">        maven &#123; url <span class="string">'https://maven.aliyun.com/repository/public'</span> &#125;  <span class="comment">//为解决“unable to find valid certification”所加，下同</span></span><br><span class="line">        google()</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        jcenter()是一个代码托管仓库，很多 Android开源项目都会选择将代码托管到 center上，声明了这行配置之后，</span></span><br><span class="line"><span class="comment">        我们就可以在项目中轻松引用任何 jcenter上的开源项目了。</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        jcenter()</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">'com.android.tools.build:gradle:3.6.3'</span>    <span class="comment">//声明了一个gradle插件</span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></span><br><span class="line">        <span class="comment">// in the individual module build.gradle files</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        maven &#123; url <span class="string">'https://maven.aliyun.com/repository/public'</span> &#125;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task clean(<span class="string">type:</span> Delete) &#123;</span><br><span class="line">    delete rootProject.buildDir</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-内层的build-gradle"><a href="#2-内层的build-gradle" class="headerlink" title="2.内层的build.gradle"></a>2.内层的build.gradle</h4><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span> <span class="comment">//应用一个插件，可选com.android.application或com.android.library</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion <span class="number">29</span>    <span class="comment">//指定项目的编译版本</span></span><br><span class="line">    buildToolsVersion <span class="string">"29.0.3"</span>      <span class="comment">//指定项目构建工具的版本</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    一个defaultConfig闭包</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">"com.example.as1"</span> <span class="comment">//指定项目包名</span></span><br><span class="line">        minSdkVersion <span class="number">16</span>       <span class="comment">//项目最低兼容的Android系统版本</span></span><br><span class="line">        targetSdkVersion <span class="number">29</span>     <span class="comment">/*targetsdkversion指定的值表示你在该目标版本上已经做过了充分的测试，</span></span><br><span class="line"><span class="comment">                                系统将会为你的应用程序启用一些最新的功能和特性。*/</span></span><br><span class="line">        versionCode <span class="number">1</span>           <span class="comment">//指定项目版本号</span></span><br><span class="line">        versionName <span class="string">"1.0"</span>       <span class="comment">//指定项目版本名</span></span><br><span class="line"></span><br><span class="line">        testInstrumentationRunner <span class="string">"androidx.test.runner.AndroidJUnitRunner"</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    buildTypes闭包中用于指定生成安装文件的相关配置，通常只会有两个子闭包，一个是 debug，一个是 release</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        <span class="comment">//debug闭包用于指定生成测试版安装文件的配置，可以忽略不写</span></span><br><span class="line">        <span class="comment">//release闭包用于指定生成正式版安装文件的配置</span></span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled <span class="literal">false</span>     <span class="comment">//指定是否对项目的代码进行混淆</span></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            1.proguardFiles指定混淆时使用的规则文件</span></span><br><span class="line"><span class="comment">            这里指定了两个文件，第一个 proguard- android.txt是在 Android SdK目录下的，里面是所有项目通用的</span></span><br><span class="line"><span class="comment">            混淆规则，第二个 proguard- rules. pro是在当前项目的根目录下的，里面可以编写当前项目</span></span><br><span class="line"><span class="comment">            特有的混淆规则。</span></span><br><span class="line"><span class="comment">            2.需要注意的是，通过 Android studio直接运行项目生成的都是测试版安装文件，</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">'proguard-android-optimize.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//dependencies闭包指定当前项目所有的依赖关系</span></span><br><span class="line"><span class="comment">/*通常 Android studio项目一共有3种依赖方式:本地依赖、库依赖和远程依赖。</span></span><br><span class="line"><span class="comment">1.本地依赖可以对本地的Jar包或目录添加依赖关系，</span></span><br><span class="line"><span class="comment">2.库依赖可以对项目中的库模块添加依赖关系，</span></span><br><span class="line"><span class="comment">3.远程依赖则可以对 center库上的开源项目添加依赖关系。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">include:</span> [<span class="string">'*.jar'</span>])</span><br><span class="line"></span><br><span class="line">    implementation <span class="string">'androidx.appcompat:appcompat:1.1.0'</span></span><br><span class="line">    implementation <span class="string">'androidx.constraintlayout:constraintlayout:1.1.3'</span></span><br><span class="line">    testImplementation <span class="string">'junit:junit:4.12'</span></span><br><span class="line">    androidTestImplementation <span class="string">'androidx.test.ext:junit:1.1.1'</span></span><br><span class="line">    androidTestImplementation <span class="string">'androidx.test.espresso:espresso-core:3.2.0'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="四-日志工具使用"><a href="#四-日志工具使用" class="headerlink" title="四.日志工具使用"></a>四.日志工具使用</h1><h2 id="1-日志工具类"><a href="#1-日志工具类" class="headerlink" title="1.日志工具类"></a>1.日志工具类</h2><p>android.util.Log</p>
+<h2 id="2-System-out"><a href="#2-System-out" class="headerlink" title="2.System.out"></a>2.System.out</h2><p>一般不用System.out，System.out缺点：比如日志打印不可控制、打印时间无法确定、不能添加过滤器、日志没有级别区分…</p>
+<h2 id="3-过滤器的使用"><a href="#3-过滤器的使用" class="headerlink" title="3.过滤器的使用"></a>3.<font color=red>过滤器的使用</font></h2><p>1.三种过滤器</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200909125507.png" alt="image-20200909125505915"></p>
+<p>1)Show only selected application表示只显示当前选中程序的日志，<br>2)Firebase是谷歌提供的一个分析工具，我们可以不用管它<br>3)No Filters相当于没有过滤器，会把所有的日志都显示出来。</p>
+<p>（图中的的data是我自定义的过滤器）</p>
+<p>2.自定义过滤器</p>
+<p>可设置<font color=red>日志级别控制、关键字过滤（可正则匹配）</font>，构造丰富的过滤条件</p>
+]]></content>
+      <categories>
+        <category>-Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>java基础</title>
+    <url>/2021/06/10/java%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="一-基本概念"><a href="#一-基本概念" class="headerlink" title="一.基本概念"></a>一.基本概念</h1><h2 id="1-初始化顺序"><a href="#1-初始化顺序" class="headerlink" title="1.初始化顺序"></a>1.初始化顺序</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">静态对象&gt;非静态</span><br><span class="line"></span><br><span class="line">父类先于子类</span><br><span class="line"></span><br><span class="line">成员变量按照定义的顺序初始化</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-和c-区别"><a href="#2-和c-区别" class="headerlink" title="2.和c++区别"></a>2.和c++区别</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.纯粹面向对象</span><br><span class="line">2.没有指针,它的引用可以理解为安全指针</span><br><span class="line">3.垃圾自动回收机制, C++ 需要手动回收</span><br><span class="line">4.不支持操作符重载</span><br><span class="line">5.通过jvm实现跨平台特性</span><br><span class="line">6.不支持多重继承</span><br><span class="line">7.内置了线程支持，而c++需要第三方库</span><br><span class="line">8.goto是保留字，不可以用</span><br><span class="line">9.不支持条件编译</span><br></pre></td></tr></table></figure>
+
+<p>ps:条件编译笔记</p>
+<p><a href="http://m.biancheng.net/c/ifdef/?ivk_sa=1024320u" target="_blank" rel="noopener">http://m.biancheng.net/c/ifdef/?ivk_sa=1024320u</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.条件编译的好处</span><br><span class="line">	1）编译器效率</span><br><span class="line">	2）防止头文件中的全局变量，多次编译，造作重复定义错误</span><br><span class="line">2.#ifndef与#ifdef区别</span><br><span class="line">3.#if	#endif	#elif	#else</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-反射"><a href="#3-反射" class="headerlink" title="3.反射"></a>3.反射</h2><p>反射 (Reflection) 是 Java 程序开发语言的特征之一，它允许运行中的 Java 程序获取自身的信息，并且可以操作类或对象的内部属性。通过 Class 获取 class 信息称之为反射（Reflection）</p>
+<p>程序中一般的对象的类型都是在编译期就确定下来的，而 Java 反射机制可以动态地创建对象并调用其属性，这样的对象的类型在编译期是未知的。所以我们可以通过反射机制直接创建对象，即使这个对象的类型在编译期是未知的。</p>
+<p><font color=red>反射的核心是 JVM 在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。</font></p>
+<p>　　</p>
+<p>动态加载资源</p>
+<h2 id="4-注解——annotation"><a href="#4-注解——annotation" class="headerlink" title="4.注解——annotation"></a>4.注解——annotation</h2><p>自定义注解类编写规则</p>
+<ol>
+<li>Annotation 型定义为 @interface, 所有的 Annotation 会自动继承 java.lang.Annotation 这一接口，并且不能再去继承别的类或是接口.</li>
+<li>参数成员只能用 public 或默认(default)这两个访问权修饰</li>
+<li>参数成员只能用基本类型 byte,short,char,int,long,float,double,boolean 八种基本数据类型和 String、Enum、Class、annotations 等数据类型，以及这一些类型的数组</li>
+<li>要获取类方法和字段的注解信息，必须通过 Java 的反射技术来获取 Annotation 对象，因为你除此之外没有别的获取注解对象的方法</li>
+<li>注解也可以没有定义成员, 不过这样注解就没啥用了 PS：自定义注解需要使用到元注解</li>
+</ol>
+<h2 id="5-泛型"><a href="#5-泛型" class="headerlink" title="5.泛型"></a>5.泛型</h2><p>jdk5之后引入</p>
+<p>1）泛型方法：在调用时可以接收不同类型的参数</p>
+<p>​    有一个类型参数，如    public <E> void printMsg(E e){}</p>
+<p>​    类型参数只能代表引用型类型，不能是原始类型（像int,double,char的等）</p>
+<p>2)泛型类</p>
+<p>3）类型通配符    例如 <strong>List&lt;?&gt;</strong> 在逻辑上是<strong>List<String>,List<Integer></strong> 等所有List&lt;具体类型实参&gt;的父类。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">类型通配符上限，形如：List&lt;? extends Number&gt;表示接收Number及其下层类型</span><br><span class="line">类型通配符下限，形如：List&lt;? super Number&gt;表示类型只能接受Number及其三层父类类型</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-字符编码与字节"><a href="#6-字符编码与字节" class="headerlink" title="6.字符编码与字节"></a>6.字符编码与字节</h2><table>
+<thead>
+<tr>
+<th>ANSI 字符串</th>
+<th>在内存中，如果“字符”是以 <strong>ANSI 编码</strong>形式存在的，一个字符可能使用一个字节或多个字节来表示，那么我们称这种字符串为 <strong>ANSI 字符串</strong>或者<strong>多字节字符串</strong>。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UNICODE 字符串</td>
+<td>在内存中，如果“字符”是以在 UNICODE 中的序号存在的，那么我们称这种字符串为 <strong>UNICODE 字符串</strong>或者<strong>宽字节字符串</strong>。</td>
+</tr>
+</tbody></table>
+<p>不同编码里，字符和字节的对应关系不同</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th><strong>概念描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ASCII</td>
+<td>一个英文字母（不分大小写）占一个字节的空间，一个中文汉字占两个字节的空间。一个二进制数字序列，在计算机中作为一个数字单元，一般为 8 位二进制数，换算为十进制。最小值 0，最大值 255。</td>
+</tr>
+<tr>
+<td>UTF-8</td>
+<td>一个英文字符等于一个字节，一个中文（含繁体）等于三个字节</td>
+</tr>
+<tr>
+<td>Unicode</td>
+<td>一个英文等于两个字节，一个中文（含繁体）等于两个字节。符号：英文标点占一个字节，中文标点占两个字节。举例：英文句号“.”占 1 个字节的大小，中文句号“。”占 2 个字节的大小。</td>
+</tr>
+<tr>
+<td>UTF-16</td>
+<td>一个英文字母字符或一个汉字字符存储都需要 2 个字节（Unicode扩展区的一些汉字存储需要4个字节）</td>
+</tr>
+<tr>
+<td>UTF-32</td>
+<td>世界上任何字符的存储都需要 4 个字节</td>
+</tr>
+</tbody></table>
+<h2 id="7-访问修饰符"><a href="#7-访问修饰符" class="headerlink" title="7.访问修饰符"></a>7.访问修饰符</h2><table>
+<thead>
+<tr>
+<th>修饰符</th>
+<th>当前类</th>
+<th>同一个包</th>
+<th>子类</th>
+<th>不同包</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+</tr>
+<tr>
+<td>default(默认)</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>private</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<p><font color=red>Java 中，外部类的修饰符只能是 public 或默认</font>，类的成员（包括内部类）的修饰符可以是以上四种</p>
+<h2 id="8-浅拷贝深拷贝"><a href="#8-浅拷贝深拷贝" class="headerlink" title="8.浅拷贝深拷贝"></a>8.浅拷贝深拷贝</h2><h2 id="9-lambda表达式"><a href="#9-lambda表达式" class="headerlink" title="9.lambda表达式"></a>9.lambda表达式</h2><p>Lambda 表达式主要用来定义行内执行的方法类型接口，例如，一个简单方法接口</p>
+<p>免去了使用匿名表达式的麻烦（函数化编程能力</p>
+<p>2）变量作用域</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lambda 表达式只能引用标记了 final 的外层局部变量，这就是说不能在 lambda 内部修改定义在域外的局部变量，否则会编译错误。</span><br><span class="line"></span><br><span class="line">public class Java8Tester &#123;</span><br><span class="line"> </span><br><span class="line">   final static String salutation &#x3D; &quot;Hello! &quot;;</span><br><span class="line">   </span><br><span class="line">   public static void main(String args[])&#123;</span><br><span class="line">      GreetingService greetService1 &#x3D; message -&gt; </span><br><span class="line">      System.out.println(salutation + message);</span><br><span class="line">      greetService1.sayMessage(&quot;Runoob&quot;);&#x2F;&#x2F;假设已定义该方法</span><br><span class="line">   &#125;</span><br><span class="line">    </span><br><span class="line">   interface GreetingService &#123;</span><br><span class="line">      void sayMessage(String message);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 Lambda 表达式当中不允许声明一个与局部变量同名的参数或者局部变量。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String first &#x3D; &quot;&quot;; </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;编译会出错</span><br><span class="line">Comparator&lt;String&gt; comparator &#x3D; (first, second) -&gt; Integer.compare(first.length(), second.length());</span><br></pre></td></tr></table></figure>
+
+<h2 id="10-字符串常量池"><a href="#10-字符串常量池" class="headerlink" title="10.字符串常量池"></a>10.字符串常量池</h2><p>1）创建字符串</p>
+<p>字面量形式，如 <code>String str = &quot;abc&quot;;</code></p>
+<p>标准的构造对象的方法，如 <code>String str = new String(&quot;abc&quot;);</code></p>
+<p><font color=red>这两种实现其实存在着一些性能和内存占用的差别。这一切都是源于 JVM 为了减少字符串对象的重复创建，其维护了一个特殊的内存，这段内存被称为字符串常量池或者字符串字面量池。</font></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        String s1 &#x3D; &quot;abc&quot;;</span><br><span class="line">        String s2 &#x3D; &quot;abc&quot;;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 以上两个局部变量都存在了常量池中</span><br><span class="line">        System.out.println(s1 &#x3D;&#x3D; s2); &#x2F;&#x2F; true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; new出来的对象不会放到常量池中,内存地址是不同的</span><br><span class="line">        String s3 &#x3D; new String();</span><br><span class="line">        String s4 &#x3D; new String();</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">     	* 字符串的比较不可以使用双等号,这样会比较内存地址</span><br><span class="line">     	* 字符串比较应当用equals,可见String重写了equals</span><br><span class="line">     	*&#x2F;</span><br><span class="line">        System.out.println(s3 &#x3D;&#x3D; s4); &#x2F;&#x2F; false</span><br><span class="line">        System.out.println(s3.equals(s4)); &#x2F;&#x2F; true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ps:==与equals()区别</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x3D;&#x3D;比较的是内存地址（引用）</span><br><span class="line"></span><br><span class="line">equals()比较的是对应的值</span><br></pre></td></tr></table></figure>
+
+
+
+<p>11.解释型语言与编译型语言</p>
+<p>　　将高级语言翻译成计算机语言有编译，解释两种方式。两种方式只是翻译的时间不同。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">编译语言：</span><br><span class="line">直接转换为处理器可以执行的机器代码。</span><br><span class="line">	1）结果，它们会比解释语言更快更高效地执行</span><br><span class="line">	2）每次需要进行更改时，你都需要重新编译（缺点：在测试之前完成整个编译步骤需要额外的时间</span><br><span class="line">	3）生成的二进制代码对平台的依赖性，可移植性差</span><br><span class="line"></span><br><span class="line">解释型语言：</span><br><span class="line">由专门的解释器，根据需要将部分源代码临时转换成特定平台的机器码。</span><br><span class="line">	1）解释型语言更加灵活，并且通常具有诸如动态键入和程序较小的特点。</span><br><span class="line">	2）另外，由于解释器自己执行源程序代码，因此代码本身相对于平台是独立的。</span><br></pre></td></tr></table></figure>
+
+<h1 id="二-java面向对象"><a href="#二-java面向对象" class="headerlink" title="二.java面向对象"></a>二.java面向对象</h1><h2 id="1-面向对象的四个基本特性"><a href="#1-面向对象的四个基本特性" class="headerlink" title="1.面向对象的四个基本特性"></a>1.面向对象的四个基本特性</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">抽象</span><br><span class="line">封装：我们在类中编写的方法就是对实现细节的一种封装；我们编写一个类就是对数据和数据操作		的封装。可以说，封装就是隐藏一切可隐藏的东西，只向外界提供最简单的编程接口。</span><br><span class="line">继承：继承是从已有类得到继承信息创建新类的过程</span><br><span class="line">多态：多态性是指允许不同子类型的对象对同一消息作出不同的响应。</span><br></pre></td></tr></table></figure>
+
+<p>1）多态的理解</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">方法重载(overload)</span><br><span class="line"></span><br><span class="line">方法重写(override)</span><br></pre></td></tr></table></figure>
+
+<p>2)<strong>面相对象开发方式优点（B65）</strong></p>
+<p>较高的<strong>开发效率</strong>：可以把事物进行抽象，映射为开发的对象。</p>
+<p>保证软件的<strong>鲁棒性</strong>：高重用性，可以重用已有的而且在相关领域经过长期测试的代码。</p>
+<p>保证软件的<strong>高可维护性</strong>：代码的可读性非常好，设计模式也使得代码结构清晰，拓展性好</p>
+<h2 id="2-什么是重载、重写"><a href="#2-什么是重载、重写" class="headerlink" title="2.什么是重载、重写"></a>2.什么是重载、重写</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.重载</span><br><span class="line">	发生在一个类中，同名的方法有不同的参数列表（参数类型不同、参数个数不同，或者二者都不同）</span><br><span class="line">	1)被重载的方法必须改变参数列表(参数个数或类型不一样)；</span><br><span class="line">	2)被重载的方法可以改变返回类型；</span><br><span class="line">	3)被重载的方法可以改变访问修饰符；</span><br><span class="line">	4）被重载的方法可以声明新的或更广的检查异常</span><br><span class="line">	</span><br><span class="line">2.重写</span><br><span class="line">	发生在子类与父类之间</span><br><span class="line">	1）参数列表与被重写方法的参数列表必须完全相同。</span><br><span class="line">	2）返回类型与被重写方法的返回类型可以不相同，但是必须是父类返回值的派生类（java7及以后</span><br><span class="line">	3）访问权限不能比父类中被重写的方法的访问权限更低</span><br><span class="line">	4）声明为 final 的方法不能被重写。声明为 static 的方法不能被重写，但是能够被再次声明。</span><br><span class="line">	5）能不能重写和访问修饰符有关</span><br><span class="line">	6）构造方法不能被重写</span><br><span class="line">	7）不能比父类被重写方法声明更多的异常（里氏代换原则）</span><br></pre></td></tr></table></figure>
+
+<p><font color=red>方法重载是一个类的多态性表现,而方法重写是子类与父类的一种多态性表现。</font></p>
+<p>菜鸟教程：<a href="https://www.runoob.com/java/java-override-overload.html" target="_blank" rel="noopener">https://www.runoob.com/java/java-override-overload.html</a></p>
+<h2 id="3-面向对象与面向过程区别"><a href="#3-面向对象与面向过程区别" class="headerlink" title="3.面向对象与面向过程区别"></a>3.面向对象与面向过程区别</h2><p>4.面向对象开发六个基本原则</p>
+<p>参考《设计模式之禅》</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.单一职责（Single Responsibility Principle 简称 SRP）：一个类应该仅有一个引起它变化的原因。在面向对象中，如果只让一个类完成它该做的事，而不涉及与它无关的领域就是践行了高内聚的原则，这个类就只有单一职责。</span><br><span class="line"></span><br><span class="line">2。里氏替换（Liskov Substitution Principle 简称 LSP）：任何时候子类型能够替换掉它们的父类型。子类一定是增加父类的能力而不是减少父类的能力，因为子类比父类的能力更多，把能力多的对象当成能力少的对象来用当然没有任何问题。</span><br><span class="line"></span><br><span class="line">3.依赖倒置（Dependence Inversion Principle 简称 DIP）：要依赖于抽象，不要依赖于具体类。要做到依赖倒置，应该做到：①高层模块不应该依赖底层模块，二者都应该依赖于抽象；②抽象不应该依赖于具体实现，具体实现应该依赖于抽象。</span><br><span class="line"></span><br><span class="line">4.接口隔离（Interface Segregation Principle 简称 ISP）：不应该强迫客户依赖于他们不用的方法 。接口要小而专，绝不能大而全。臃肿的接口是对接口的污染，既然接口表示能力，那么一个接口只应该描述一种能力，接口也应该是高度内聚的。</span><br><span class="line"></span><br><span class="line">5.最少知识原则（Least Knowledge Principle 简称 LKP）：只和你的朋友谈话。迪米特法则又叫最少知识原则，一个对象应当对其他对象有尽可能少的了解。</span><br><span class="line"></span><br><span class="line">6.开闭原则（Open Closed Principle 简称 OCP）：软件实体应当对扩展开放，对修改关闭。要做到开闭有两个要点：①抽象是关键，一个系统中如果没有抽象类或接口系统就没有扩展点；②封装可变性，将系统中的各种可变因素封装到一个继承结构中，如果多个可变因素混杂在一起，系统将变得复杂而换乱。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-内部类"><a href="#5-内部类" class="headerlink" title="5.内部类"></a>5.内部类</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">成员内部类：</span><br><span class="line">	无限制的访问外围类的所有成员属性和方法，尽管是private的，外围类要访问内部类的成员	属性和方法则需要通过内部类实例来访问。</span><br><span class="line">	不能存在static方法, 但是可以存在static域, 前提是需要使用final关键字进行修饰.</span><br><span class="line">	成员</span><br><span class="line">局部内部类：</span><br><span class="line">	它是嵌套在方法和作用域内的，</span><br><span class="line">匿名内部类：</span><br><span class="line">	匿名内部类也就是没有名字的内部类。正因为没有名字，所以匿名内部类只能使用一次，它通	 常用来简化代码编写。但使用匿名内部类还有个前提条件：必须继承一个父类或实现一个接口</span><br><span class="line">	最常用的情况就是在多线程的实现上，因为要实现多线程必须继承 Thread 类或是继承 		Runnable 接口</span><br><span class="line">静态内部类</span><br><span class="line">	它的创建是不需要依赖于外围类的。</span><br><span class="line">	它不能使用任何外围类的非 static 成员变量和方法</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-组合、继承和代理的区别"><a href="#6-组合、继承和代理的区别" class="headerlink" title="6.组合、继承和代理的区别"></a>6.组合、继承和代理的区别</h2><h2 id="7-构造函数"><a href="#7-构造函数" class="headerlink" title="7.构造函数"></a>7.构造函数</h2><p>不需要返回值类型（和void不是一个概念）</p>
+<p>且构造函数的名称与所在的类名完全一致，其余的与函数的特性相同，可以带有参数列表，可以存在函数的重载现象。</p>
+<h2 id="8-向上造型和向下造型"><a href="#8-向上造型和向下造型" class="headerlink" title="8.向上造型和向下造型"></a>8.向上造型和向下造型</h2><p>​    接口回调：可以把使用实现了某一接口的类创建的对象的引用赋给该接口声明的接口变量，那么该接口变量就可以调用被类实现的接口的方法</p>
+<p>​    上转型对象：</p>
+<p>比如当子类创建一个对象，并把这个对象的引用放到父类对象中时。对象的上转型对象的实体是子类负责创建的，但上转型对象会失去原对象的一些属性 和 功能（上转型对象相当于子类对象的一个“简化”对象）</p>
+<h1 id="三-关键字"><a href="#三-关键字" class="headerlink" title="三.关键字"></a>三.关键字</h1><h2 id="1-final与static的区别"><a href="#1-final与static的区别" class="headerlink" title="1.final与static的区别"></a>1.final与static的区别</h2><p>final</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.数据</span><br><span class="line">	为常量</span><br><span class="line">	对于基本类型，final使得数值不变</span><br><span class="line">	对于引用类型，final使得引用不变（但是引用的对象本身是可以修改的）</span><br><span class="line">2.方法</span><br><span class="line">	那么该方法不能被子类覆盖</span><br><span class="line">	（private方法被隐式地指定为final）</span><br><span class="line">3.类</span><br><span class="line">	该类不能被继承(比如String)</span><br></pre></td></tr></table></figure>
+
+<p>static</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.静态变量</span><br><span class="line">	在内存中只有一份，只在类初始化时赋值一次</span><br><span class="line">	（ps：实例变量，每个类在创建一个对象时就会实例化它的实例变量</span><br><span class="line">	（ps：不能在成员函数内部定义static变量</span><br><span class="line">2.静态方法</span><br><span class="line">	必须有实现</span><br><span class="line">3.静态语句块</span><br><span class="line">	在类初始化的时候运行一次（效率？？？</span><br><span class="line">4.静态内部类</span><br><span class="line">	内部类的一种，不依赖于外部类，不能访问外部类的非静态变量和方法</span><br><span class="line">5.静态导包</span><br><span class="line">	import static com.xxx.ClassName.*</span><br><span class="line">6.变量赋值顺序</span><br><span class="line">	静态变量的赋值和静态语句块的运行优先于实例变量的赋值和普通语句块的运行</span><br><span class="line">	静态变量的赋值和静态语句块的运行哪个先执行取决于它们在代码中的顺序。</span><br><span class="line">	（再就是构造函数</span><br><span class="line">	（继承情况下</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-break、continue、return"><a href="#2-break、continue、return" class="headerlink" title="2.break、continue、return"></a>2.break、continue、return</h2><p>break:跳出当前循环</p>
+<p>continue：终止当前循环，继续往下根据循环条件执行循环</p>
+<p>return：可以不带参数返回，主要目的就是中断函数执行，返回函数调用出</p>
+<h2 id="3-final、finally和finalize区别"><a href="#3-final、finally和finalize区别" class="headerlink" title="3.final、finally和finalize区别"></a>3.final、finally和finalize区别</h2><p>1）final 用于声明属性、方法和类，分别表示属性不可变、方法不可覆盖和类不可被继承。</p>
+<p>2）finally：用于异常处理，只能用在 try/catch 语句中</p>
+<p><font color=red>3）画重点：finallly代码块不会被执行的两种情况</font></p>
+<p>3.1）情况1：当代码在try语句之前结束运行时，finally代码块不会被执行</p>
+<p>3.2）情况2：当执行try语句块的线程终止时，finally代码块不会被执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">可能是try语句块里执行了System.exit()</span><br><span class="line">或者该线程被中断被kill</span><br></pre></td></tr></table></figure>
+
+<p><font color=red>4）try_catch_finally和return的执行顺序问题</font></p>
+<p>​    <strong>finally块的执行时间点在try和catch中return语句的表达式值计算之后返回之前。</strong> 不论try和catch代码块中有没有return语句，执行顺序都是先计算try或catch中return语句的表达式的值并暂存，<strong>然后执行finally代码块</strong>。若finally代码块中无return，则返回之前try或catch中暂存的return语句的表达式的值；若finally代码块中有return，则直接就地返回。</p>
+<p>5)finalize()方法</p>
+<p>​    finalize() 是 Object 中的方法，当垃圾回收器将要回收对象所占内存之前被调用，即当一个对象被虚拟机宣告死亡时会先调用它 finalize() 方法，让此对象处理它生前的最后事情（这个对象可以趁这个时机挣脱死亡的命运）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如何最后的救赎</span><br></pre></td></tr></table></figure>
+
+<p>该方法没设么鸟用</p>
+<h2 id="4-assert有什么作用"><a href="#4-assert有什么作用" class="headerlink" title="4.assert有什么作用"></a>4.assert有什么作用</h2><p>​    一种软件调试的方法，提供了一种在代码中进行正确性检查的机制，目前很多开发语言都支持这种机制</p>
+<p>​    一般来说，assertion 用于保证程序最基本、关键的正确性。<strong>assertion 检查通常在开发和测试时开启</strong>。为了提高性能，<strong>在软件发布后，assertion 检查通常是关闭的</strong>。下面简单介绍一下 Java 中 assertion 的实现。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">String</span>[] args)</span> </span>&#123;</span><br><span class="line">    System.out.<span class="built_in">println</span>(<span class="string">"123"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">1</span>;</span><br><span class="line">    assert a == b; <span class="comment">//需显示开启，默认为不开启状态 </span></span><br><span class="line">    assert a == b : <span class="string">"执行失败！"</span>;</span><br><span class="line"></span><br><span class="line">    System.out.<span class="built_in">println</span>(<span class="string">"1234"</span>);c</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>常用的断言方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-volatile"><a href="#5-volatile" class="headerlink" title="5.volatile"></a>5.volatile</h2><p>类型修饰符：被设计用来修饰被不同线程访问和修改的变量</p>
+<p><font color=red>在使用 volatile 修饰成员变量后，所有线程在任何时间所看到变量的值都是相同的。此外，使用 volatile 会组织编译器对代码的优化，因此会降低程序的执行效率。所以，除非迫不得已，否则，能不使用 volatile 就尽量不要使用 volatile。</font></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">每次访问变量时，总是获取主内存的最新值</span><br><span class="line">每次修改变量后，立刻写回到主内存中</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-instanceof"><a href="#6-instanceof" class="headerlink" title="6.instanceof"></a>6.instanceof</h2><p>二元操作符，测试它左边的对象是否是它右边的类的实例，返回 boolean 的数据类型。</p>
+<p><font color=red>不是运算符</font></p>
+<h2 id="7-strictfp"><a href="#7-strictfp" class="headerlink" title="7.strictfp"></a>7.strictfp</h2><p>​    可应用于类、接口或方法。使用 strictfp 关键字声明一个方法时，该方法中所有的 float 和 double 表达式都严格遵守 FP-strict 的限制,符合 IEEE-754 规范。当对一个类或接口使用 strictfp 关键字时，该类中的所有代码，包括嵌套类型中的初始设定值和代码，都将严格地进行计算。严格约束意味着所有表达式的结果都必须是 IEEE 754 算法对操作数预期的结果，以单精度和双精度格式表示。</p>
+<p>​    如果你想让你的浮点运算更加精确，而且不会因为不同的硬件平台所执行的结果不一致的话，可以用关键字strictfp.</p>
+<h2 id="8-transient"><a href="#8-transient" class="headerlink" title="8.transient"></a>8.transient</h2><p>这个字段的生命周期仅存于调用者的内存中而不会写到磁盘里持久化。</p>
+<p><font color=red>Java 的 transient 关键字为我们提供了便利，你只需要实现 Serilizable 接口，将不需要序列化的属性前添加关键字transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。</font></p>
+<h2 id="9-native"><a href="#9-native" class="headerlink" title="9.native"></a>9.native</h2><p>​    Java 平台有个用户和本地 C 代码进行互操作的 API，称为 Java Native Interface (Java本地接口)。</p>
+<h1 id="四-基本数据类型与运算"><a href="#四-基本数据类型与运算" class="headerlink" title="四.基本数据类型与运算"></a>四.基本数据类型与运算</h1><h2 id="1-Java的基本数据类型和引用类型，自动装箱和拆箱"><a href="#1-Java的基本数据类型和引用类型，自动装箱和拆箱" class="headerlink" title="1.Java的基本数据类型和引用类型，自动装箱和拆箱"></a>1.Java的基本数据类型和引用类型，自动装箱和拆箱</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存储</th>
+<th>取值范围</th>
+<th>默认值</th>
+<th>包装类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>整数型</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>byte</td>
+<td>8</td>
+<td>最大存储数据量是 255，最小 -27，最大 27-1， [-128~127]</td>
+<td>(byte) 0</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>16</td>
+<td>最大数据存储量是 65536，[-215,215-1]， [-32768,32767]，±3万</td>
+<td>(short) 0</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>int</td>
+<td>32</td>
+<td>最大数据存储容量是 231-1， [-231,231-1]，±21亿，[ -2147483648, 2147483647]</td>
+<td>0</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>long</td>
+<td>64</td>
+<td>最大数据存储容量是 264-1， [-263,263-1]， ±922亿亿（±（922+16个零））</td>
+<td>0L</td>
+<td>Long</td>
+</tr>
+<tr>
+<td><strong>浮点型</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>float</td>
+<td>32</td>
+<td>数据范围在 3.4e-45~1.4e38，直接赋值时必须在数字后加上 f 或 F</td>
+<td>0.0f</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>double</td>
+<td>64</td>
+<td>数据范围在 4.9e-324~1.8e308，赋值时可以加 d 或 D 也可以不加</td>
+<td>0.0d</td>
+<td>Double</td>
+</tr>
+<tr>
+<td><strong>布尔型</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>1</td>
+<td>true / flase</td>
+<td>false</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td><strong>字符型</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>char</td>
+<td>16</td>
+<td>存储 Unicode 码，用单引号赋值</td>
+<td>‘\u0000’ (null)</td>
+<td>Character</td>
+</tr>
+</tbody></table>
+<p>2）引用类型：数组、类、接口</p>
+<p>3）自动装箱拆箱</p>
+<p>基本数据类型和它对应的封装类型之间可以相互转换。自动拆装箱是 <code>jdk5.0</code> 提供的新特特性，它可以自动实现类型的转换</p>
+<p>装箱<strong>：从</strong>基本数据类型<strong>到</strong>封装类型叫做装箱</p>
+<p>拆箱<strong>：从</strong>封装类型<strong>到</strong>基本数据类型叫拆箱</p>
+<h2 id="2-ValueOf缓存池"><a href="#2-ValueOf缓存池" class="headerlink" title="2.ValueOf缓存池"></a>2.ValueOf缓存池</h2><h2 id="3-i-与-i"><a href="#3-i-与-i" class="headerlink" title="3.i++与++i"></a>3.i++与++i</h2><p>1）<strong>i++ 的操作分三步</strong></p>
+<ol>
+<li>栈中取出 i</li>
+<li>i 自增 1</li>
+<li>将 i 存到栈</li>
+</ol>
+<p>三个阶段：内存到寄存器，寄存器自增，写回内存（这三个阶段中间都可以被中断分离开）</p>
+<p>所以 i++ 不是原子操作，上面的三个步骤中任何一个步骤同时操作，都可能导致 i 的值不正确自增</p>
+<p>2）原子性：指的是一个操作是不可中断的。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程打断</p>
+<p>3）jvm三大特性：原子性、有序性、可见性</p>
+<h2 id="4-位运算符"><a href="#4-位运算符" class="headerlink" title="4.位运算符"></a>4.位运算符</h2><p>&amp;    |    ~    ^    &gt;&gt;    &lt;&lt;    &gt;&gt;&gt;(无符号右移)</p>
+<h2 id="5-原码、反码、补码"><a href="#5-原码、反码、补码" class="headerlink" title="5.原码、反码、补码"></a>5.原码、反码、补码</h2><p>1）机器数：一个数在计算机中的二进制表示形式（带符号，1：负数，0：正数）</p>
+<p>2）真值：因为第一位是符号位，所以机器数的形式值就不等于真正的数值</p>
+<p>3）原码</p>
+<p>原码就是符号位加上真值的绝对值，即用第一位表示符号，其余位表示值。比如如果是 8 位二进制:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">　　[+1]原 &#x3D; 0000 0001</span><br><span class="line"></span><br><span class="line">　　[-1]原 &#x3D; 1000 0001</span><br><span class="line"></span><br><span class="line">　　第一位是符号位。因为第一位是符号位，所以 8 位二进制数的取值范围就是：[1111 1111 , 0111 1111]，即：[-127 , 127]</span><br></pre></td></tr></table></figure>
+
+<p>4）反码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">正数的反码：是其本身；</span><br><span class="line">负数的反码：是在其原码的基础上，符号位不变，其余各个位取反</span><br></pre></td></tr></table></figure>
+
+<p>5）补码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">正数的补码是：本身</span><br><span class="line">负数的补码是：反码的基础上+1</span><br><span class="line">[+1] &#x3D; [0000 0001]原 &#x3D; [0000 0001]反 &#x3D; [0000 0001]补</span><br><span class="line"></span><br><span class="line">[-1] &#x3D; [1000 0001]原 &#x3D; [1111 1110]反 &#x3D; [1111 1111]补</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-不用额外变量交换两个整数的值"><a href="#6-不用额外变量交换两个整数的值" class="headerlink" title="6.不用额外变量交换两个整数的值"></a>6.不用额外变量交换两个整数的值</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a &#x3D; a^b</span><br><span class="line">b &#x3D; a^b</span><br><span class="line">a &#x3D; a^b</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-不使用算术运算符实现两整数相加"><a href="#7-不使用算术运算符实现两整数相加" class="headerlink" title="7.不使用算术运算符实现两整数相加"></a>7.不使用算术运算符实现两整数相加</h2><h2 id="8-amp-和-amp-amp-的区别，-和-的区别"><a href="#8-amp-和-amp-amp-的区别，-和-的区别" class="headerlink" title="8.&amp;和&amp;&amp;的区别，||和|的区别"></a>8.&amp;和&amp;&amp;的区别，||和|的区别</h2><p>&amp;&amp;和||是逻辑运算符，|和&amp;是位运算符</p>
+<p> &amp; 和 &amp;&amp; 在判断语句中都可以实现“和”这个功能，不过区别在于 &amp; 两边都运算，而 &amp;&amp; 先算 &amp;&amp; 左侧，若左侧为 false 那么右侧就不运算了。</p>
+<p>因此从效率上来说，判断语句中推荐使用 &amp;&amp;（换句话就是逻辑运算就老老实实用逻辑运算符，不然它为啥叫逻辑运算符呢？）</p>
+<h1 id="五-字符串与数组"><a href="#五-字符串与数组" class="headerlink" title="五.字符串与数组"></a>五.字符串与数组</h1><p>1.String与StringBuffer、StringBuilder区别和联系</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.三者都是final类，不可以被继承</span><br><span class="line">2.String长度不可变，其他两个可变</span><br><span class="line">3.StringBuffer是线程安全的，StringBuilder不是线程安全的，StringBuffer与StringBuilder相比加上了synchronized修饰</span><br><span class="line">4.因为第三点，StringBuilder比StringBuffer拥有更好的性能</span><br><span class="line">5.</span><br></pre></td></tr></table></figure>
+
+<p>String不变性的理解</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>-java</category>
+      </categories>
+      <tags>
+        <tag>-java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构基础</title>
+    <url>/2021/07/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="线性数据结构"><a href="#线性数据结构" class="headerlink" title="线性数据结构"></a>线性数据结构</h1><h2 id="1-数组"><a href="#1-数组" class="headerlink" title="1. 数组"></a>1. 数组</h2><p>1）它由相同类型的元素（element）组成，并且是使用一块连续的内存来存储。</p>
+<p>2）数组的特点是：<strong>提供随机访问</strong> 并且容量有限。</p>
+<p>3）考虑插入、删除、查找的时间复杂度</p>
+<h2 id="2-链表"><a href="#2-链表" class="headerlink" title="2.链表"></a>2.链表</h2><p><strong>1常见链表分类：</strong></p>
+<ol>
+<li><p>单链表</p>
+</li>
+<li><p>双向链表</p>
+</li>
+<li><p>循环链表</p>
+</li>
+<li><p>双向循环链表</p>
+<p>头节点、尾节点、后继指针（next）、前继指针（prev）</p>
+</li>
+</ol>
+<h3 id="2-链表特点"><a href="#2-链表特点" class="headerlink" title="2.链表特点"></a>2.链表特点</h3><p>​    优点：可以克服数组需要预先知道数据大小的缺点，链表结构可以充分利用计算机内存空间,实现灵活的内存动态管理（使用的不是连续的内存空间来存储数据）</p>
+<p>​    缺点：链表不会节省空间，相比于数组会占用更多的空间，因为链表中每个节点存放的还有指向其他节点的指针。除此之外，链表不具有数组随机读取的优点。</p>
+<h3 id="4-应用场景"><a href="#4-应用场景" class="headerlink" title="4.应用场景"></a>4.应用场景</h3><p>比如数据元素个数不确定，且需要经常删除添加元素…..</p>
+<p><font color=red>不适用于随机访问情境况</font></p>
+<h3 id="5-数组-vs-链表"><a href="#5-数组-vs-链表" class="headerlink" title="5.数组 vs 链表"></a>5.数组 vs 链表</h3><ul>
+<li>数组支持随机访问，而链表不支持。</li>
+<li>数组使用的是连续内存空间对 CPU 的缓存机制友好，链表则相反。</li>
+<li>数组的大小固定，而链表则天然支持动态扩容。如果声明的数组过小，需要另外申请一个更大的内存空间存放数组元素，然后将原数组拷贝进去，这个操作是比较耗时的！</li>
+</ul>
+<h2 id="3-栈"><a href="#3-栈" class="headerlink" title="3.栈"></a>3.栈</h2><p><strong>栈</strong> (stack)只允许在有序的线性数据集合的一端（称为栈顶 top）进行加入数据（push）和移除数据（pop）。因而按照 <strong>后进先出（LIFO, Last In First Out）</strong> 的原理运作。<strong>在栈中，push 和 pop 的操作都发生在栈顶。</strong></p>
+<h3 id="1-应用场景"><a href="#1-应用场景" class="headerlink" title="1.应用场景"></a>1.应用场景</h3><p>当我们我们要处理的数据只涉及在一端插入和删除数据，并且满足 <strong>后进先出（LIFO, Last In First Out）</strong> 的特性时，我们就可以使用栈这个数据结构。</p>
+<p>比如：</p>
+<h4 id="1-实现浏览器的回退和前进功能"><a href="#1-实现浏览器的回退和前进功能" class="headerlink" title="1.实现浏览器的回退和前进功能"></a>1.实现浏览器的回退和前进功能</h4><p>​    需要两个栈</p>
+<h4 id="2-检查符号是否成对出现"><a href="#2-检查符号是否成对出现" class="headerlink" title="2.检查符号是否成对出现"></a>2.检查符号是否成对出现</h4><p>有效字符串需满足：</p>
+<p>​    左括号必须用相同类型的右括号闭合。</p>
+<p>​    左括号必须以正确的顺序闭合。</p>
+<p>方法</p>
+<ol>
+<li>首先我们将括号间的对应规则存放在 <code>Map</code> 中（比如有哪些括号……)</li>
+<li>创建一个栈。遍历字符串，如果字符是左括号就直接加入<code>stack</code>中，否则将<code>stack</code> 的栈顶元素与这个括号做比较，如果不相等就直接返回 false。遍历结束，如果<code>stack</code>为空(比较左右括号的个数），返回 <code>true</code>。</li>
+</ol>
+<h4 id="3-反转字符串"><a href="#3-反转字符串" class="headerlink" title="3.反转字符串"></a>3.反转字符串</h4><p>将字符串中的每个字符先入栈再出栈就可以了。</p>
+<h4 id="4-维护函数调用"><a href="#4-维护函数调用" class="headerlink" title="4.维护函数调用"></a>4.维护函数调用</h4><p>递归调用</p>
+<p>最后一个被调用的函数必须先完成执行，符合栈的 <strong>后进先出（LIFO, Last In First Out）</strong> 特性。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="2-实现"><a href="#2-实现" class="headerlink" title="2.实现"></a>2.实现</h3><p>主要数组和链表两种方式</p>
+<h2 id="4-队列"><a href="#4-队列" class="headerlink" title="4.队列"></a>4.队列</h2><h3 id="1-队列简介"><a href="#1-队列简介" class="headerlink" title="1. 队列简介"></a>1. 队列简介</h3><p><strong>队列</strong> 是 <strong>先进先出( FIFO，First In, First Out)</strong> 的线性表。在具体应用中通常用链表或者数组来实现，用数组实现的队列叫作 <strong>顺序队列</strong> ，用链表实现的队列叫作 <strong>链式队列</strong> 。<strong>队列只允许在后端（rear）进行插入操作也就是 入队 enqueue，在前端（front）进行删除操作也就是出队 dequeue</strong></p>
+<p>队列的操作方式和堆栈类似，唯一的区别在于队列只允许新数据在后端进行添加。</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007191203.png" alt="image-20210630172226089"></p>
+<h3 id="2-分类"><a href="#2-分类" class="headerlink" title="2.分类"></a>2.分类</h3><p>1.单队列——又分为 <strong>顺序队列（数组实现）</strong> 和 <strong>链式队列（链表实现）</strong></p>
+<p>​    1）假溢出情况：明明有位置却不能添加的情况</p>
+<p>​    为了避免当只有一个元素的时候，队头和队尾重合使处理变得麻烦，所以引入两个指针，front 指针指向对头元素，rear 指针指向队列最后一个元素的下一个位置，这样当 front 等于 rear 时，此队列不是还剩一个元素，而是空队列。——From 《大话数据结构》</p>
+<p>在上面的情况中，队列为空的判断：front +1=rearr</p>
+<p>2.循环队列</p>
+<p>​    可以解决顺序队列的假溢出和越界问题。解决办法就是：从头开始，这样也就会形成头尾相接的循环，这也就是循环队列名字的由来。</p>
+<p>还是用上面的图，我们将 rear 指针指向数组下标为 0 的位置就不会有越界问题了。当我们再向队列中添加元素的时候， rear 向后移动。</p>
+<p>顺序队列中，我们说 <code>front==rear</code> 的时候队列为空，循环队列中则不一样，也可能为满，如上图所示。解决办法有两种：</p>
+<ol>
+<li>可以设置一个标志变量 <code>flag</code>,当 <code>front==rear</code> 并且 <code>flag=0</code> 的时候队列为空，当<code>front==rear</code> 并且 <code>flag=1</code> 的时候队列为满。</li>
+<li>队列为空的时候就是 <code>front==rear</code> ，队列满的时候，我们保证数组还有一个空闲的位置，rear 就指向这个空闲位置，如下图所示，那么现在判断队列是否为满的条件就是： <code>(rear+1) % QueueSize= front</code> 。</li>
+</ol>
+<h3 id="3-使用场景"><a href="#3-使用场景" class="headerlink" title="3.使用场景"></a>3.使用场景</h3><p>阻塞队列、消息队列、线程池中的任务/请求队列、生活中的派对，播放器上的播放列表;</p>
+<h1 id="非线性数据结构"><a href="#非线性数据结构" class="headerlink" title="非线性数据结构"></a>非线性数据结构</h1><h2 id="1-堆"><a href="#1-堆" class="headerlink" title="1.堆"></a>1.堆</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>堆是一种满足以下条件的树：</p>
+<p>堆中的每一个节点值都大于等于（或小于等于）子树中所有节点的值。或者说，任意一个节点的值都大于等于（或小于等于）所有子节点的值。</p>
+<p><font color=red><strong>堆不一定是完全二叉树</strong>，只是为了方便存储和索引，我们通常用完全二叉树的形式来表示堆</font></p>
+<p><strong>ps:相对于有序数组而言，堆的主要优势在于更新数据效率较高。</strong> 堆的初始化时间复杂度为 <code>O(nlog(n))</code>，堆可以做到<code>O(1)</code>时间复杂度取出最大值或者最小值，<code>O(log(n))</code>时间复杂度插入或者删除数据</p>
+<h3 id="2-堆的分类"><a href="#2-堆的分类" class="headerlink" title="2.堆的分类"></a>2.堆的分类</h3><p>堆分为 <strong>最大堆</strong> 和 <strong>最小堆</strong>。二者的区别在于节点的排序方式。</p>
+<h3 id="3-堆的存储"><a href="#3-堆的存储" class="headerlink" title="3.堆的存储"></a>3.堆的存储</h3><p>由于完全二叉树的优秀性质，利用数组存储二叉树即节省空间，又方便索引（若根结点的序号为1，那么对于树中任意节点i，其左子节点序号为 <code>2*i</code>，右子节点序号为 <code>2*i+1</code>）</p>
+<h3 id="4-堆的操作总结"><a href="#4-堆的操作总结" class="headerlink" title="4.堆的操作总结"></a>4.堆的操作总结</h3><h4 id="1-插入元素（以最大堆为例）"><a href="#1-插入元素（以最大堆为例）" class="headerlink" title="1)插入元素（以最大堆为例）"></a>1)插入元素（以最大堆为例）</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">将要插入的元素放到最后</span><br><span class="line">从底向上，如果父结点比该元素小，则该节点和父结点交换，直到无法交换</span><br></pre></td></tr></table></figure>
+
+<h4 id="2）删除堆顶元素（以最大堆为例）"><a href="#2）删除堆顶元素（以最大堆为例）" class="headerlink" title="2）删除堆顶元素（以最大堆为例）"></a>2）删除堆顶元素（以最大堆为例）</h4><p>删除堆顶元素后，为了保持堆的性质，需要对堆的结构进行调整，我们将这个过程称之为”<strong>堆化</strong>“，堆化的方法分为两种：</p>
+<p>​    一种是<strong>自底向上的堆化</strong>，上述的插入元素所使用的就是自底向上的堆化，元素从最底部向上移动。</p>
+<p>​    另一种是<strong>自顶向下堆化</strong>，元素由最顶部向下移动。在讲解删除堆顶元素的方法时，我将阐述这两种操作的过程，大家可以体会一下二者的不同。</p>
+<p><strong>自底向上的堆化</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">首先删除堆顶元素，使得数组中下标为1的位置空出。</span><br><span class="line">比较根结点的左子节点和右子节点，也就是下标为2,3的数组元素，将较大的元素填充到根结点(下标为1)的位置</span><br><span class="line">一直循环比较空出位置的左右子节点，并将较大者移至空位，直到堆的最底部</span><br></pre></td></tr></table></figure>
+
+<p>完成自底向上的堆化后，没有元素可以填补空缺了，但是，数组中出现了“气泡”，这会导致存储空间的浪费。</p>
+<p><strong>自顶向下堆化</strong></p>
+<p><strong>概括起来：石沉大海</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">第一件事情，就是把石头抬起来，从海面扔下去。这个石头就是堆的最后一个元素，我们将最后一个元素移动到堆顶。</span><br><span class="line">然后开始将这个石头沉入海底，不停与左右子节点的值进行比较，和较大的子节点交换位置，直到无法交换位置。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-操作总结"><a href="#5-操作总结" class="headerlink" title="5.操作总结"></a>5.操作总结</h3><ul>
+<li><strong>插入元素</strong> ：先将元素放至数组末尾，再自底向上堆化，将末尾元素上浮</li>
+<li><strong>删除堆顶元素</strong> ：删除堆顶元素，将末尾元素放至堆顶，再自顶向下堆化，将堆顶元素下沉。也可以自底向上堆化，只是会产生“气泡”，浪费存储空间。最好采用自顶向下堆化的方式。</li>
+</ul>
+<h2 id="2-堆排序"><a href="#2-堆排序" class="headerlink" title="2.堆排序"></a>2.堆排序</h2><p>堆排序的过程分为两步：</p>
+<ul>
+<li>第一步是建堆，将一个无序的数组建立为一个堆</li>
+<li>第二步是排序，将堆顶元素取出，然后对剩下的元素进行堆化，反复迭代，直到所有元素被取出为止。</li>
+</ul>
+<h3 id="1-建堆"><a href="#1-建堆" class="headerlink" title="1.建堆"></a>1.建堆</h3><p>建堆的过程就是一个对所有非叶节点的自顶向下堆化过程。</p>
+<p>非叶节点：最后一个节点的父结点及它之前的元素。也就是说，如果节点个数为n，那么我们需要对n/2到1的节点进行自顶向下（沉底）堆化。</p>
+<p><font color=red>从后往前堆化</font></p>
+<h3 id="2-排序"><a href="#2-排序" class="headerlink" title="2.排序"></a>2.排序</h3><p>将堆顶元素不断取出，放到数组末尾，并对剩下的元素不断堆化。</p>
+<p>现在思考两个问题：</p>
+<ul>
+<li>删除堆顶元素后需要执行自顶向下（沉底）堆化还是自底向上（上浮）堆化？</li>
+<li>取出的堆顶元素存在哪，新建一个数组存？</li>
+</ul>
+<p>1）自顶向下（沉底）</p>
+<p>因为自顶向下堆化的话，最末尾的元素要移到堆顶，这样末尾的位置就空出来了，且不会再被利用，所以可以将取出的堆顶元素放到末尾</p>
+<p><font color=red>相当于堆顶和末尾元素对换位置</font></p>
+<p>2）显而易见，存在原数组</p>
+<h2 id="3-图"><a href="#3-图" class="headerlink" title="3.图"></a>3.图</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h3><p>​    图就是由顶点的有穷非空集合和顶点之间的边组成的集合。通常表示为：<strong>G(V,E)</strong>，其中，G表示一个图，V表示顶点的集合，E表示边的集合。</p>
+<h3 id="2-图的基本概念"><a href="#2-图的基本概念" class="headerlink" title="2.图的基本概念"></a>2.图的基本概念</h3><p>1）顶点</p>
+<p>​    图中的数据元素，我们称之为顶点，图至少有一个顶点（非空有穷集合）</p>
+<p>2）边</p>
+<p>​    顶点之间的关系用边表示。</p>
+<p>3）度</p>
+<p>​    度表示一个顶点包含多少条边，在有向图中，还分为出度和入度，出度表示从该顶点出去的边的条数，入度表示进入该顶点的边的条数。</p>
+<p>4）无向图和有向图</p>
+<p>​    边表示的是顶点之间的关系，有的关系是双向的，比如同学关系，A是B的同学，那么B也肯定是A的同学，那么在表示A和B的关系时，就不用关注方向，用不带箭头的边表示，这样的图就是无向图。</p>
+<p>​    有的关系是有方向的，比如父子关系，师生关系，微博的关注关系，A是B的爸爸，但B肯定不是A的爸爸，A关注B，B不一定关注A。在这种情况下，我们就用带箭头的边表示二者的关系，这样的图就是有向图。</p>
+<p>5）无权图和带权图</p>
+<p>​    对于一个关系，如果我们只关心关系的有无，而不关心关系有多强，那么就可以用无权图表示二者的关系。</p>
+<p>​    对于一个关系，如果我们既关心关系的有无，也关心关系的强度，比如描述地图上两个城市的关系，需要用到距离，那么就用带权图来表示，带权图中的每一条边一个数值表示权值，代表关系的强度。</p>
+<h3 id="3-图的存储"><a href="#3-图的存储" class="headerlink" title="3.图的存储"></a>3.图的存储</h3><h4 id="1）邻接矩阵"><a href="#1）邻接矩阵" class="headerlink" title="1）邻接矩阵"></a>1）邻接矩阵</h4><p>​    <strong>无向图的邻接矩阵是一个对称矩阵，因为在无向图中，顶点i和顶点j有关系，则顶点j和顶点i必有关系。</strong></p>
+<p>​    邻接矩阵存储的方式优点是简单直接（直接使用一个二维数组即可），并且，在获取两个定点之间的关系的时候也非常高效（直接获取指定位置的数组元素的值即可）。但是，这种存储方式的缺点也比较明显，那就是比较浪费空间，</p>
+<h4 id="2）邻接表"><a href="#2）邻接表" class="headerlink" title="2）邻接表"></a>2）邻接表</h4><p>数一数邻接表中所存储的元素的个数以及图中边的条数，你会发现：</p>
+<ul>
+<li>在无向图中，邻接表元素个数等于边的条数的两倍</li>
+<li>在有向图中，邻接表元素个数等于边的条数</li>
+</ul>
+<h3 id="4-图的搜索"><a href="#4-图的搜索" class="headerlink" title="4.图的搜索"></a>4.图的搜索</h3><p>广度优先——使用到了队列</p>
+<p>深度优先——使用到了栈</p>
+<p>本文参考链接：<a href="https://github.com/Snailclimb/JavaGuide" target="_blank" rel="noopener">https://github.com/Snailclimb/JavaGuide</a></p>
+]]></content>
+      <categories>
+        <category>-数据结构</category>
+      </categories>
+      <tags>
+        <tag>-数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构-个人复习版</title>
+    <url>/2021/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%B8%AA%E4%BA%BA%E5%A4%8D%E4%B9%A0%E7%89%88/</url>
+    <content><![CDATA[<h2 id="附：参数传递"><a href="#附：参数传递" class="headerlink" title="附：参数传递"></a>附：参数传递</h2><p>传值与传引用</p>
+<p>如果传入的变量是指针类型，并且在函数体内要对传入的指针进行改变，需要写成如下形式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void f(int *&amp;x)&#123;</span><br><span class="line">	++x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="逻辑和顺序结构"><a href="#逻辑和顺序结构" class="headerlink" title="逻辑和顺序结构"></a>逻辑和顺序结构</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">顺序表的定义、结构</span><br><span class="line"><span class="keyword">int</span> A[maxSize]; </span><br><span class="line"><span class="keyword">int</span> length = <span class="number">0</span>;</span><br><span class="line">这种写法更常用</span><br><span class="line"></span><br><span class="line">链表的定义、结构（单链表）</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span> &#123;</span>c</span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span> *<span class="title">next</span>;</span> </span><br><span class="line">    &#125;LNode;</span><br><span class="line">LNode *L; </span><br><span class="line">L = (LNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LNode))；</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="链表的五种形式"><a href="#链表的五种形式" class="headerlink" title="链表的五种形式"></a>链表的五种形式</h2><p>判空总结</p>
+<p>对于不带头结点的链表，无论是单链表还是双链表，无论循环还是不循环的，判空条件都是Head==NULL</p>
+<p>1.单链表</p>
+<p>分为带头结点与不带头结点</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007201211.png" alt="image-20211007201208549"></p>
+<p>2.双链表</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007201242.png" alt="image-20211007201239994"></p>
+<p>3.单循环链表</p>
+<p>4.双循环链表</p>
+<p>​    <strong>下面的图是带有头结点的</strong></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007201350.png" alt="image-20211007201318163"></p>
+<p><strong>这是不带头结点的</strong></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007201411.png" alt=""></p>
+<p>循环链表（<font color=red>含有头结点</font>）的判空，较之前有变化，<font color=red>无论什么时候都不会有空指针</font></p>
+<p>不含头结点的判空，都是Head==NULL</p>
+<h2 id="1-考点"><a href="#1-考点" class="headerlink" title="1.考点"></a>1.考点</h2><p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007193559.png" alt="image-20210805164103327"></p>
+<h3 id="1-特性对比"><a href="#1-特性对比" class="headerlink" title="1.特性对比"></a>1.特性对比</h3><p>1.在顺序表中插⼊和删除元素可能会导致移动⼤量元素的连带 操作（插⼊或删除操作发⽣在表尾位置例外），⽽链表不 会。</p>
+<p>2.在单链表中找到任意⼀个结点的位置不像顺序表那么简单，因 为顺序表⽀持随机存取（任意存取），⽽单链表不⽀持</p>
+<p>3.线性表采⽤顺序存储结构，必须占⽤⼀⽚连续的存储单元， ⽽采⽤链式存储结构则不需要这样；<br>从表整体来看，⼀般顺序表存储空间利⽤率低于链表；⽽从单个存储单元来看，顺序表存储空间利⽤率要⾼于链表</p>
+<p><font color=red>利用零散 存储空间</font></p>
+<h3 id="2-插入删除"><a href="#2-插入删除" class="headerlink" title="2.插入删除"></a>2.插入删除</h3><p>注意点：</p>
+<p>​    1）合法性判断</p>
+<p>​    2）删除时，需要使用free()函数释放节点，所以需要将被释放的节点表示出来。</p>
+<p>例题</p>
+<p>1.<img src="C:/Users/14747/AppData/Roaming/Typora/typora-user-images/image-20211007194927252.png" alt="image-20211007194927252" style="zoom: 33%;" /></p>
+<p>2.有一个递增非空单链表，设计一个算法删除值域重复的结点。例如、{1，1，2，2，3，3，7，7，9，9，9}经过删除后变成{1，2，3，4，7，9}。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span></span></span><br><span class="line"><span class="class">	<span class="title">int</span> <span class="title">data</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">LNode</span> *<span class="title">next</span>;</span></span><br><span class="line">) LNode;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">de1</span><span class="params">( LNode *L)</span></span>&#123;</span><br><span class="line">	LNode *p=L-&gt;next,*q;</span><br><span class="line">	<span class="keyword">while</span>(p-&gt;next!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p-&gt;data==p-next-&gt;data)&#123;</span><br><span class="line">            q = p-&gt;next;</span><br><span class="line">            p-&gt;next = q-&gt;next;</span><br><span class="line">            <span class="built_in">free</span>(q);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            p = p-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3.设计一个算法，将一个头结点为A的单链表（其数据域为整数）分解成两个单链表A和B，使得A链表只含有原来链表中data域为奇数的结点，而B链表只含有原链表中data域为偶数的结点，且保持原来的相对顺序。</p>
+<p>split(LNode *A,LNode<font color=red> *&amp;B</font>)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void split(LNode *A,LNode *&amp;B)&#123;</span><br><span class="line">	LNode *p,*q,*r;</span><br><span class="line">	B &#x3D; (LNode *)malloc(sizeof(LNode));</span><br><span class="line">	p &#x3D; A;</span><br><span class="line">	B-&gt;next &#x3D; NULL;</span><br><span class="line">	r &#x3D; B;</span><br><span class="line">	</span><br><span class="line">	while(p-&gt;next!&#x3D;NULL)&#123;</span><br><span class="line">		if(p-&gt;next-&gt;data%2&#x3D;&#x3D;0)&#123;</span><br><span class="line">			q &#x3D; p-&gt;next;</span><br><span class="line">			p-&gt;next &#x3D; q-next;</span><br><span class="line">			</span><br><span class="line">			r-&gt;next &#x3D; q;</span><br><span class="line">			q-&gt;next &#x3D; NULL;</span><br><span class="line">			r &#x3D; q;</span><br><span class="line">		&#125;else</span><br><span class="line">			p &#x3D; p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>建表</p>
+<p>头插、尾插、一堆包含重复数据元素的数据见表（表中无重复数据）</p>
+<h2 id="3-逆置"><a href="#3-逆置" class="headerlink" title="3.逆置"></a>3.逆置</h2><p>1.顺序表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for(int i &#x3D; left, int j &#x3D; right; i&lt;j; ++i,--j)&#123;</span><br><span class="line">	int temp &#x3D; a[i];</span><br><span class="line">	a[i] &#x3D; a[j];</span><br><span class="line">	a[j] &#x3D; temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.单链表</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007201446.png" alt="image-20211007195001546"></p>
+<p>p结点之后的元素到q指向的元素，逆置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LNode *r;</span><br><span class="line">while(p-&gt;next!&#x3D;q)&#123;</span><br><span class="line">	r &#x3D; p-&gt;next;</span><br><span class="line">	p-&gt;next &#x3D; r-&gt;next;</span><br><span class="line">	</span><br><span class="line">	r-&gt;next &#x3D; q-&gt;next;</span><br><span class="line">	q-&gt;next &#x3D; r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-划分"><a href="#4-划分" class="headerlink" title="4.划分"></a>4.划分</h2>]]></content>
+      <categories>
+        <category>-数据结构</category>
+      </categories>
+      <tags>
+        <tag>-数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>嵌入式——汇编代码实现求素数和、判断倍数</title>
+    <url>/2021/06/10/%E5%B5%8C%E5%85%A5%E5%BC%8F%E2%80%94%E2%80%94%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E6%B1%82%E7%B4%A0%E6%95%B0%E5%92%8C%E3%80%81%E5%88%A4%E6%96%AD%E5%80%8D%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="1-作业1——启动程序"><a href="#1-作业1——启动程序" class="headerlink" title="1.作业1——启动程序"></a>1.作业1——启动程序</h1><p>1.汇编代码</p>
+<p>1）<font color=red>启动文件，至少需要包含三个段: 堆栈段、中断向量表、代码段,对应于代码中的mstack    RESET    mcode这三个段</font></p>
+<p>2）标号和宏定义需要顶格写，像代码中的stack_start、vectors等就是标号，需要顶格编写</p>
+<p>3）DCD：分配一个或者多个以字为单位的内存，以四字节对齐，并要求初始化这些内存。</p>
+<p>4）EQU:等于指令,把一个符号名称与一个整数表达式或一个任意文本连接起来</p>
+<p>5）中断向量表的第一项必须是栈顶指针的地址 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;相当于宏定义，指定了栈的大小:512KB</span><br><span class="line">stack_size EQU 0x200	;EQU：等于指令</span><br><span class="line"></span><br><span class="line">;定义一个栈，栈名：mstack，可读可写权限</span><br><span class="line">	AREA mstack, DATA, READWRITE	</span><br><span class="line">stack_start </span><br><span class="line">	SPACE stack_size	;SPACE：用于分配一定大小的内存空间，单位为字节。这里指定大小等于 stack_size。</span><br><span class="line">stack_end</span><br><span class="line">	PRESERVE8	;指定当前文件的堆栈按照 8 字节对齐</span><br><span class="line">	</span><br><span class="line">;定义中断向量表,段名：RESET，只读权限</span><br><span class="line">	AREA RESET, DATA, READONLY	</span><br><span class="line">vectors	;中断向量开始地址</span><br><span class="line">	DCD stack_end	;栈顶指针地址</span><br><span class="line">	DCD test_start	;代码段开始的地址</span><br><span class="line">vectors_end		;中断向量结束地址</span><br><span class="line"></span><br><span class="line">;定义代码段，段名：mycode，只读权限，ALIGN&#x3D;3表示8字节对齐(2^3)</span><br><span class="line">	AREA mycode, CODE, READONLY, ALIGN&#x3D;3</span><br><span class="line">test_start	</span><br><span class="line"></span><br><span class="line">	B . ;while(1)</span><br><span class="line">	END</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="2-作业二——a是b的倍数的汇编代码"><a href="#2-作业二——a是b的倍数的汇编代码" class="headerlink" title="2.作业二——a是b的倍数的汇编代码"></a>2.作业二——a是b的倍数的汇编代码</h1><p>1.C语言代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;返回值1表示是倍数，为0表示不是倍数</span><br><span class="line">int is_multi(int a, int b)&#123;</span><br><span class="line">	int flag &#x3D; 0;</span><br><span class="line">	int temp &#x3D; b;</span><br><span class="line">	while(b&lt;&#x3D;a)&#123;</span><br><span class="line">		if(a&#x3D;&#x3D;b)&#123;</span><br><span class="line">			flag &#x3D; 1;</span><br><span class="line">			break;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			b+&#x3D;temp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.汇编代码实现</p>
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154443.png" alt="image-20210327142811840" style="zoom: 67%;" />
+
+<p>结果1：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a&#x3D;34,b&#x3D;6,运行结果R0&#x3D;0,不是倍数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154439.png" alt="image-20210327142554493" style="zoom:67%;" />
+
+<p>结果2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a&#x3D;12,b&#x3D;6,运行结果R0&#x3D;1,是倍数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154434.png" alt="image-20210327142720329" style="zoom:67%;" />
+
+<h1 id="3-作业三——汇编代码判断X是否为素数"><a href="#3-作业三——汇编代码判断X是否为素数" class="headerlink" title="3.作业三——汇编代码判断X是否为素数"></a>3.作业三——汇编代码判断X是否为素数</h1><p>1.C语言代码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_prime</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> flag = <span class="number">1</span>;	<span class="comment">//flag=1表示是素数,flag=0表示不是素数</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;x)&#123;</span><br><span class="line">		<span class="keyword">if</span>(is_multi(x,i)==<span class="number">1</span>)&#123;</span><br><span class="line">			flag = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.汇编代码实现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test_start	PROC</span><br><span class="line">	</span><br><span class="line">	MOV R0,#5	;x</span><br><span class="line">	</span><br><span class="line">	BL is_prime</span><br><span class="line">	B . ;while(1)</span><br><span class="line">	ENDP</span><br><span class="line">	END</span><br><span class="line">	</span><br><span class="line">;子过程2——判断是否为素数</span><br><span class="line">is_prime	PROC</span><br><span class="line">	PUSH &#123;R1-R12,LR&#125;</span><br><span class="line">	MOV R2,R0	;参数x--&gt;R1</span><br><span class="line">	MOV R3,#2	;int i &#x3D; 2;</span><br><span class="line">	MOV R0,#1	;int flag &#x3D; 1;</span><br><span class="line">	</span><br><span class="line">loop_isprime</span><br><span class="line">	CMP	R3,R2</span><br><span class="line">	MOVEQ R0,#1</span><br><span class="line">	BGE loop_isprime_end</span><br><span class="line">	MOV R0,R2</span><br><span class="line">	MOV R1,R3</span><br><span class="line">	BL is_multi</span><br><span class="line">	CMP R0,#1</span><br><span class="line">	MOVEQ R0,#0	;if(is_multi(x,i)&#x3D;&#x3D;1)	flag &#x3D; 0;</span><br><span class="line">	BEQ loop_isprime_end</span><br><span class="line">	ADD R3,R3,#1</span><br><span class="line">	BL loop_isprime</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">loop_isprime_end</span><br><span class="line">	POP &#123;R1-R12,PC&#125;</span><br><span class="line">	ENDP</span><br></pre></td></tr></table></figure>
+
+<p>结果1</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入x&#x3D;12，R0&#x3D;0,表示不是素数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154428.jpg" style="zoom:67%;" />
+
+<p>结果2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入x&#x3D;5，R0&#x3D;1,表示是素数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210328153622.png" style="zoom:67%;" />
+
+<h1 id="4-作业四——计算1-100以内的素数之和，同时将这些素数存起来"><a href="#4-作业四——计算1-100以内的素数之和，同时将这些素数存起来" class="headerlink" title="4.作业四——计算1-100以内的素数之和，同时将这些素数存起来"></a>4.作业四——计算1-100以内的素数之和，同时将这些素数存起来</h1><p><strong>1.思路如下</strong>：判断 x 是否为比自己小的一个素数的倍数，如果是，则x不是素数，反之。</p>
+<p>2.<strong>C语言代码</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">prime_sum</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	定义一个存放素数的数组:prinme_array;</span></span><br><span class="line"><span class="comment">	表示素数个数的变量:prime_count </span></span><br><span class="line"><span class="comment">	100以内的素数和变量：prime_sum </span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">int</span> prime_array[<span class="number">100</span>] ;</span><br><span class="line">	<span class="keyword">int</span> prime_count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> prime_sum = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//将2放到数组中 </span></span><br><span class="line">	prime_array[prime_count] = <span class="number">2</span>;</span><br><span class="line">	prime_sum +=<span class="number">2</span>;</span><br><span class="line">	prime_count += <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">2</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//便利1-100的每个数 </span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">2</span>; i&lt;<span class="number">100</span>; i++)&#123;	</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j&lt;prime_count;)&#123;</span><br><span class="line">			<span class="keyword">if</span>(is_multi(i,prime_array[j]))	<span class="keyword">break</span>;</span><br><span class="line">			j++;</span><br><span class="line">			<span class="keyword">if</span>(j==prime_count)&#123;</span><br><span class="line">				prime_array[prime_count] = i;</span><br><span class="line">				prime_sum +=i;</span><br><span class="line">				prime_count += <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;	</span><br><span class="line">	<span class="keyword">return</span> prime_sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;定义数据段，存放素数数组	</span><br><span class="line">	AREA MYDATA, DATA, READWRITE</span><br><span class="line">prime_array</span><br><span class="line">	SPACE	400	;SPACE：用于分配一定大小的内存空间，单位为字节。</span><br><span class="line">prime_array_end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">prime_sum PROC </span><br><span class="line">	PUSH &#123;R1-R12,LR&#125;</span><br><span class="line">	MOV R4,R0		;100--&gt;R4</span><br><span class="line">	MOV R6,#0		;prime_count--&gt;r6</span><br><span class="line">	MOV R5,#0		;sum--&gt;R5</span><br><span class="line">	MOV R7,#2		;i--&gt;R7	</span><br><span class="line">loop1</span><br><span class="line">	CMP R7,R4		;</span><br><span class="line">	BGT loop1_end</span><br><span class="line">	MOV R8,#0		;j&#x3D;0</span><br><span class="line">	</span><br><span class="line">loop2</span><br><span class="line">	CMP R8,R6		</span><br><span class="line">	BEQ	loop2_end		;j&#x3D;prime_count</span><br><span class="line">	MOV R0,R7</span><br><span class="line">	LDR R2,&#x3D;prime_array</span><br><span class="line">	MOV R3,R8,LSL #2</span><br><span class="line">	ADD R3,R2,R3</span><br><span class="line">	LDR R1,[R3]</span><br><span class="line">	BL	is_multi</span><br><span class="line">	CMP R0,#1</span><br><span class="line">	BEQ loop2_end</span><br><span class="line">	ADD R8,R8,#1</span><br><span class="line">	B loop2</span><br><span class="line">	</span><br><span class="line">loop2_end</span><br><span class="line">	CMP R8,R6</span><br><span class="line">	ADDEQ R5,R5,R7		;prime_sum +&#x3D;i</span><br><span class="line">	LDREQ R1,&#x3D;prime_array</span><br><span class="line">	MOVEQ R2,R6,LSL #2</span><br><span class="line">	ADDEQ R1,R1,R2</span><br><span class="line">	STREQ R7,[R1]		;prime_array[prime_count] &#x3D; i</span><br><span class="line">	ADDEQ R6,R6,#1		;prime_count++</span><br><span class="line">	ADD R7,R7,#1		;i++</span><br><span class="line">	B loop1</span><br><span class="line">		</span><br><span class="line">	</span><br><span class="line">loop1_end</span><br><span class="line">	MOV R0,R5</span><br><span class="line">	POP	&#123;R1-R12,PC&#125;</span><br><span class="line">	ENDP</span><br></pre></td></tr></table></figure>
+
+<p>3.运行结果</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210328153618.png" alt=""></p>
+<p>这里定义了一个数据段prime_array,并用SPACE分配了400byte空间。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MOVEQ R2,R6,LSL #2		&#x2F;&#x2F;这里的R6存的是数组中已有的素数的个数</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="5-作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。"><a href="#5-作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。" class="headerlink" title="5.作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。"></a>5.作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">汇编文件 与 C文件共存</span><br><span class="line">第一点：汇编中如何调用C代码</span><br><span class="line">	1.需要在汇编文件，&quot;进口&quot;：引入相应的全局变量名或全局函数， “符号”</span><br><span class="line">			IMPORT  函数名or全局变量名 </span><br><span class="line">	2.直接调用就好</span><br><span class="line">	 BL sum_three</span><br><span class="line">		</span><br><span class="line">	第二点：C文件中如何调用汇编</span><br><span class="line">	1.申明是外部函数 例如：extern int sum_two(int, int);</span><br><span class="line">	2.直接调用汇编过程（写对应的过程名就好）</span><br><span class="line">	3.回到汇编代码中还需要说明该函数是“出口”函数</span><br><span class="line">	需要用EXPORT把相应的全局变量名或全局函数名，导出</span><br><span class="line">	EXPORT sum_two</span><br></pre></td></tr></table></figure>
+
+<p>​    1.本案例编写了一个C语言函数<font color=red>is_primec(int a, int b)</font>,此函数调用了汇编过程<font color=red>is_multi</font>(通过extern导入，同时汇编代码需要通过<font color=red>EXPORT is_multi</font>将该过程导出)；</p>
+<p>在汇编中通过<font color=red>IMPORT is_primec</font>导入该函数，并通过<font color=red>BL is_primec</font>调用该c语言函数</p>
+<p>​    2.汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	IMPORT is_primec</span><br><span class="line">	EXPORT is_multi</span><br><span class="line">	</span><br><span class="line">	;定义代码段，段名：mycode，只读权限，ALIGN&#x3D;3表示8字节对齐(2^3)</span><br><span class="line">	AREA mycode, CODE, READONLY, ALIGN&#x3D;3</span><br><span class="line">test_start	PROC</span><br><span class="line">	MOV R0,#13</span><br><span class="line">	BL is_primec</span><br><span class="line">	B . ;while(1)</span><br><span class="line">	ENDP</span><br></pre></td></tr></table></figure>
+
+<p>​    3.C语言函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">extern</span> <span class="title">is_multi</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_primec</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> flag = <span class="number">1</span>;	<span class="comment">//flag=1表示是素数,flag=0表示不是素数</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;x)&#123;</span><br><span class="line">		<span class="keyword">if</span>(is_multi(x,i)==<span class="number">1</span>)&#123;</span><br><span class="line">			flag = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>感受：C语言函数和汇编过程相互调用简化了汇编代码的编写！！</p>
+<p>我在写汇编代码时得关注每个寄存器的内容（这里注释很重要），编写很可能出错，不过你也能亲自看到debug过程中寄存器的变化，你不禁也会感叹道“原来真的这么神奇”，同时通过这种方式，你也能看到你的C语言函数是变成了什么样的汇编代码，反过来，促进你的学习啦~~</p>
+]]></content>
+      <categories>
+        <category>-嵌入式</category>
+      </categories>
+      <tags>
+        <tag>-嵌入式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《第一行代码——安卓》学习(一）</title>
+    <url>/2020/09/06/%E3%80%8A%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E2%80%94%E2%80%94%E5%AE%89%E5%8D%93%E3%80%8B%E5%AD%A6%E4%B9%A0-%E4%B8%80%EF%BC%89%EF%BC%88%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84-%E6%97%A5%E5%BF%97%E8%AE%BE%E7%BD%AE-%E6%B4%BB%E5%8A%A8%E5%88%87%E6%8D%A2-%E6%B4%BB%E5%8A%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%8E%A2%E7%A9%B6%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h2><h3 id="1-项目结构详解："><a href="#1-项目结构详解：" class="headerlink" title="1.项目结构详解："></a>1.项目结构详解：</h3><p>分为Android 和 project模式，具体再看……</p>
+<h3 id="2-两个gradle-property结构解析："><a href="#2-两个gradle-property结构解析：" class="headerlink" title="2.两个gradle.property结构解析："></a>2.两个gradle.property结构解析：</h3><p>1）外层的gradle.property解析</p>
+<p>2）app中的gradle.properties</p>
+<h3 id="3-日志打印"><a href="#3-日志打印" class="headerlink" title="3.日志打印"></a>3.日志打印</h3><h4 id="1）五个级别："><a href="#1）五个级别：" class="headerlink" title="1）五个级别："></a>1）五个级别：</h4><p>（ps:第二级别的简单打印MainActivity类中的<strong>”某个“</strong>内容</p>
+<p>Log.d(“MainActivity”,”onCreate execute”);</p>
+<h4 id="2）android-util-Log与日常使用的system-out-println-区别："><a href="#2）android-util-Log与日常使用的system-out-println-区别：" class="headerlink" title="2）android.util.Log与日常使用的system.out.println()区别："></a>2）android.util.Log与日常使用的system.out.println()区别：</h4><p>1.Android studio不支持syso的快捷键</p>
+<p>2.日志打印不可控</p>
+<p>3.打印时间无法确定</p>
+<p>4.不能添加过滤器</p>
+<p>5.打印日志级别无法区分</p>
+<p>（ps：在onCreate（）方法外面，输入logt,回车，系统自动生成以当前的类名做为字符串的TAG常量</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private static final String TAG &#x3D; &quot;MainActivity&quot;;）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3）级别控制"><a href="#3）级别控制" class="headerlink" title="3）级别控制"></a>3）级别控制</h4><p>可详细探索，以便于排错。</p>
+<h1 id="2019-08-16-周五-p40-p50"><a href="#2019-08-16-周五-p40-p50" class="headerlink" title="2019.08.16 周五  p40~p50"></a>2019.08.16 周五  p40~p50</h1><h2 id="第二章——活动探究"><a href="#第二章——活动探究" class="headerlink" title="第二章——活动探究"></a>第二章——活动探究</h2><h3 id="1-活动的定义及基本用法"><a href="#1-活动的定义及基本用法" class="headerlink" title="1.活动的定义及基本用法"></a>1.活动的定义及基本用法</h3><h3 id="2-手动创建活动"><a href="#2-手动创建活动" class="headerlink" title="2.手动创建活动"></a>2.手动创建活动</h3><p>过程：</p>
+<p>1）新建一个empty项目(我取名为<strong>ActivityTest</strong>)</p>
+<p>2）改成project模式，在app/src/main/java/com.example.activitytest下右击新建一个empty activity（我取名为<strong>FirstActivity</strong>），</p>
+<p><font color="blue">不要勾选<strong>Generate Layout File</strong>(避免AS自动生成一个对应的布局文件) 和<strong>Launcher Activity</strong>(避免AS将当前活动设置为项目的主活动)</font></p>
+<p>3)创建布局文件</p>
+<p>app/src/main/res下新建一个布局文件夹layout，在这个文件夹下new一个布局文件(我命名为<strong>first_layout</strong>);</p>
+<p>加一个按钮作为测试（自己探索）</p>
+<p>4)在活动中加载这个first_layout布局，在onCreate()中加入如下代码：<strong>setContentView(R.layout.first_layout);</strong></p>
+<p>5）在AndroidManifest文件中注册</p>
+<p>主要目的就是为该项目配置主活动。</p>
+<p>这是我的AndroidManifest的application标签内的内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;application</span><br><span class="line">    android:allowBackup&#x3D;&quot;true&quot;</span><br><span class="line">    android:icon&#x3D;&quot;@mipmap&#x2F;ic_launcher&quot;</span><br><span class="line">    android:label&#x3D;&quot;@string&#x2F;app_name&quot;</span><br><span class="line">    android:roundIcon&#x3D;&quot;@mipmap&#x2F;ic_launcher_round&quot;</span><br><span class="line">    android:supportsRtl&#x3D;&quot;true&quot;</span><br><span class="line">    android:theme&#x3D;&quot;@style&#x2F;AppTheme&quot;&gt;</span><br><span class="line">    &lt;activity android:name&#x3D;&quot;.FirstActivity&quot;</span><br><span class="line">        android:label&#x3D;&quot;@string&#x2F;first_lablename&quot;&gt;</span><br><span class="line">        &lt;intent-filter&gt;</span><br><span class="line">            &lt;action android:name&#x3D;&quot;android.intent.action.MAIN&quot;&#x2F;&gt;</span><br><span class="line">            &lt;category android:name&#x3D;&quot;android.intent.category.LAUNCHER&quot;&#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;intent-filter&gt;</span><br><span class="line">    &lt;&#x2F;activity&gt;</span><br><span class="line">&lt;&#x2F;application&gt;</span><br></pre></td></tr></table></figure>
+
+<p>自行了解<application>标签和<intent-fliter>标签内的内容</p>
+<h3 id="3-在活动中使用Toast-Android中一种非常好的提醒方式"><a href="#3-在活动中使用Toast-Android中一种非常好的提醒方式" class="headerlink" title="3.在活动中使用Toast(Android中一种非常好的提醒方式)"></a>3.在活动中使用Toast(Android中一种非常好的提醒方式)</h3><pre><code>1）通过findViewById()方法获取到布局文件中定义的元素组件，findViewById()方法返回的是一个View对象，所以一般需要**（向下）转型**成具体的组件对象。</code></pre><p>2）为获取到的组建添加监听设置……</p>
+<p>View.OnClickListener first_onclick = new View.OnClickListener() {<br>        public void onClick(View view) {<br>            Toast.makeText(FirstActivity.this,”Toast嘻嘻，被点击到了”,Toast.LENGTH_LONG).show();<br>        }<br>    };</p>
+<p>protected void initView()<br>    {<br>        first_bttest = (Button)findViewById(R.id.first_testbut);<br>        first_bttest.setOnClickListener(first_onclick);<br>    }</p>
+<p>3）在onCreate方法中调用initVIew()方法就OK了。</p>
+<h3 id="4-销毁活动"><a href="#4-销毁活动" class="headerlink" title="4.销毁活动"></a>4.销毁活动</h3><p>1）方法一：按下back键（可以理解为退出程序）</p>
+<p>2）activity类提供了一个finish()方法</p>
+<h1 id="2019-08-17-周六-p51-p72"><a href="#2019-08-17-周六-p51-p72" class="headerlink" title="2019.08.17 周六  p51~p72"></a>2019.08.17 周六  p51~p72</h1><h2 id="第二章——活动探究-1"><a href="#第二章——活动探究-1" class="headerlink" title="第二章——活动探究"></a>第二章——活动探究</h2><h3 id="1-使用Intent在活动间进行穿梭"><a href="#1-使用Intent在活动间进行穿梭" class="headerlink" title="1.使用Intent在活动间进行穿梭"></a>1.使用Intent在活动间进行穿梭</h3><h4 id="1）简介："><a href="#1）简介：" class="headerlink" title="1）简介："></a>1）简介：</h4><p>Intent是Android程序中各组件之间进行交互的一种重要方式，它不仅可以指明当前组件想要执行的动作，还可以在不同组件之间传递数据。Intent一般可用于启动服务、启动活动、发送广播等场景。</p>
+<h4 id="2）大致分类：显式Intent和隐式Intent"><a href="#2）大致分类：显式Intent和隐式Intent" class="headerlink" title="2）大致分类：显式Intent和隐式Intent"></a>2）大致分类：显式Intent和隐式Intent</h4><p>(i)显式intent用法演示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void onClick(View view) &#123;</span><br><span class="line">        &#x2F;&#x2F;显式的intent</span><br><span class="line">       Intent intent1 &#x3D; new Intent(FirstActivity.this,SecondActivity.class);</span><br><span class="line">       startActivity(intent1);    </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>先创建一个intent对象，参数有两个，FirstActivity.this作为上文，传入SecondActivity.class作为活动目标。</p>
+<p>再在<strong>startActivity()</strong>方法里执行这个intent1</p>
+<p>(ii)隐式intent用法演示：</p>
+<p>隐式Intent含蓄了很多，它并不明确指出我们想要启动哪一个活动，而是指定一系列更为抽象的<strong>action</strong>和<strong>category</strong>,然后由系统去分析这个Intent，并帮我们找出合适的活动去启动。</p>
+<p>分以下两个步骤：</p>
+<pre><code>1.修改AndroidManifest里的
+&lt;activity android:name=&quot;.SecondActivity&quot;&gt;&lt;/activity&gt;</code></pre><p>改成如下形式：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".SecondActivity"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"com.example.activitytest.ACTION_START"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.DEFAULT"</span>&gt;</span><span class="tag">&lt;/<span class="name">category</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>（这不是绝对的）</p>
+<pre><code>2.修改onClick()函数里的内容：</code></pre><p>如改成：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">      <span class="comment">//隐式的intent</span></span><br><span class="line">      Intent intent1 = <span class="keyword">new</span> Intent(<span class="string">"com.example.activitytest.ACTION_START"</span>);</span><br><span class="line">      intent1.addCategory(<span class="string">"com.example.activitytest.MY_CATEGORY"</span>);</span><br><span class="line">      startActivity(intent1);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了Intent的一个构造函数，将action传进去了，表明我们先要启动能够响应com.example.activitytest.ACTION_START这个action的活动。（这里没有指定category，因为<strong>android.intent.category.DEFAULT</strong>是一种默认的category,在调用startActivity()方法时，会自动将category传到Intent中）</p>
+<p>但也可以通过addCategory()这个方法来设置category信息，如我在onClick()函数里还加了intent1.addCategory(“com.example.activitytest.MY_CATEGORY”);这样一个语句，用于指定一个category。</p>
+<p>如果直接运行，那么再点击按钮时，程序就会崩溃，原因如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190818140013792.png" alt="在这里插入图片描述"></p>
+<p>信息提示我们没有一个活动可以响应我们的Intent，这是因为intent1.addCategory(“com.example.activitytest.MY_CATEGORY”);这个语句，设指定了category，所以我们也需要修改AndroidManifest的Second_layout的配置信息，改成如下形式：</p>
+<activity android:name=".SecondActivity">
+            <intent-filter>
+                <action android:name="com.example.activitytest.ACTION_START"/>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="com.example.activitytest.MY_CATEGORY"/>
+            </intent-filter>
+        </activity>
+
+<p>加上后，运行OK，gift演示下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190818140033961.gif" alt="在这里插入图片描述"></p>
+<h4 id="3）更多Intent隐式用法"><a href="#3）更多Intent隐式用法" class="headerlink" title="3）更多Intent隐式用法:"></a>3）更多Intent隐式用法:</h4><p>使用隐式Intent，不仅可以启动自己程序内的活动，，还可以启动其他程序的活动，这使得Android多个应用程序之间的功能共享成了可能。</p>
+<p>演示下在该程序中打开网页：、</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="comment">//跳转到网页的按钮设置</span></span><br><span class="line">    first_webbtn = (Button)findViewById(R.id.first_webbt);</span><br><span class="line">    first_webbtn.setOnClickListener(<span class="keyword">new</span> View.OnClickListener()&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        Intent intent_temp = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW);</span><br><span class="line">        intent_temp.setData(Uri.parse(<span class="string">"http://www.baidu.com"</span>));</span><br><span class="line">        startActivity(intent_temp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行效果：</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122113.gif" alt=""></p>
+<p>这里指定Inent的action是<strong>Intent.ACTION_VIEW</strong>，这是Android系统内置的动作，其常量值为**android.intent.action.VIEW    </p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906121938.png" alt="image-20200906121936373"></p>
+<p>可用于打开打电话的应用：</p>
+<p> public void onClick(View v) {<br>                Intent intent = new Intent(Intent.ACTION_DIAL);<br>                intent.setData(Uri.parse(“tel:” + 545645));//指定一个号码<br>                if (intent.resolveActivity(getPackageManager()) != null) {<br>                    startActivity(intent);<br>                }<br>            }</p>
+<h4 id="4-向下一个活动传递数据"><a href="#4-向下一个活动传递数据" class="headerlink" title="4)向下一个活动传递数据"></a>4)向下一个活动传递数据</h4><p>Intent中提供了一系列putExtra()方法的重载，可以把我们想要传递的数据暂时存在Intent中，启动另一个活动后，就可以把数据从Intent中取出来。</p>
+<p><strong>实例：</strong>将FirstActivity中的字符串传到SecondActivity活动中</p>
+<p>(i)对于FirstActivity</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//显式的intent</span></span><br><span class="line">            Intent intent1 = <span class="keyword">new</span> Intent(FirstActivity.<span class="keyword">this</span>,SecondActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">            String data1 = <span class="string">"就是一条普通的传递过来的数据"</span>;</span><br><span class="line">            <span class="comment">//将数据传入到下一个活动</span></span><br><span class="line">            intent1.putExtra(<span class="string">"extra_data"</span>,data1);</span><br><span class="line">            startActivity(intent1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>(ii)对于SecondActivity</p>
+<p>//（就认为是监听器吧）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">View.OnClickListener onclick1 = <span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">            Intent intent1 = <span class="keyword">new</span> Intent();</span><br><span class="line">            intent1.putExtra(<span class="string">"extra_return"</span>,<span class="string">"活动结束，返回一个值"</span>);</span><br><span class="line">            setResult(RESULT_OK,intent1);</span><br><span class="line">            finish();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>//为按钮添加监听器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void init()</span><br><span class="line">    &#123;</span><br><span class="line">        second_bt1 &#x3D; (Button)findViewById(R.id.second_but1);</span><br><span class="line">        second_bt1.setOnClickListener(onclick1);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>//个人理解下面这个是主函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.second_layout);</span><br><span class="line">        Intent second_intent1 &#x3D; getIntent();</span><br><span class="line">        String data1 &#x3D; second_intent1.getStringExtra(&quot;extra_data&quot;);</span><br><span class="line">        Log.d(&quot;SecondActivity&quot;,data1);&#x2F;&#x2F;在日志中打印出传过来的字符串</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-返回数据给上一个活动"><a href="#5-返回数据给上一个活动" class="headerlink" title="5)返回数据给上一个活动"></a>5)返回数据给上一个活动</h4><p>(i)需要用到的thing：activity中的startActivityForResult()方法</p>
+<p><font color="blue">这个方法期望在活动销毁时能够返回一个结果给上一个活动，这个方法需要两个参数，一个是Intent，另一个是请求码（requestCode），用于在之后的活动中判断数据的来源（还是很好理解的吧，即判断收到的数据来自哪个活动）</font></p>
+<p><strong>(ii)A example:</strong>将SecondActivity中的字符串传到FirstActivity活动中(在日志中打印显示)</p>
+<p><strong>对于SecondActivity活动</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">View.OnClickListener onclick1 &#x3D; new View.OnClickListener() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onClick(View view) &#123;</span><br><span class="line">            Intent intent1 &#x3D; new Intent();</span><br><span class="line">            intent1.putExtra(&quot;extra_return&quot;,&quot;活动结束，返回一个值&quot;);</span><br><span class="line">            setResult(RESULT_OK,intent1);</span><br><span class="line">            finish();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>上面setResult()方法接受了两个参数，第一个用于向上一个活动返回处理结果，一般只使用RESULT_OK，RESULT_CANCELED这两个值，第二个参数把带有数据的Intent传回去</p>
+<p><strong>对于FirstActivity活动</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void onClick(View view) &#123;</span><br><span class="line">            Intent intent1 &#x3D; new Intent(FirstActivity.this,SecondActivity.class);</span><br><span class="line">            &#x2F;&#x2F;将数据传入到下一个活动</span><br><span class="line">            intent1.putExtra(&quot;extra_data&quot;,data1);</span><br><span class="line">            &#x2F;&#x2F;这个0就是请求码（requestCode），下面的onActivityResult()就使用到了</span><br><span class="line">            startActivityForResult(intent1,0);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//重写onActivityResult方法，用于接收、处理数据</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, @Nullable Intent data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (requestCode)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">case</span>  <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">if</span>(resultCode==RESULT_OK)</span><br><span class="line">                &#123;</span><br><span class="line">                    String return_data1 = data.getStringExtra(<span class="string">"extra_return"</span>);</span><br><span class="line">                    Log.d(<span class="string">"FirstActivity"</span>,return_data1);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>大功告成！！！</p>
+<h4 id="iii-按下返回键，也可以返回数据"><a href="#iii-按下返回键，也可以返回数据" class="headerlink" title="(iii)按下返回键，也可以返回数据"></a>(iii)按下返回键，也可以返回数据</h4><p>在SecondActivity活动中，重写onBackPressed()方法，使得按下返回键，也可以执行onClick（）中的方法（其实就是将onClick（）中的代码放到onBackPressed()方法里，尬笑.jpg         不然利用模块化思想，将需要复用的代码块写成一个函数）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void onBackPressed() &#123;</span><br><span class="line">       Intent intent1 &#x3D; new Intent();</span><br><span class="line">       intent1.putExtra(&quot;extra_return&quot;,&quot;活动结束，返回一个值&quot;);</span><br><span class="line">       setResult(RESULT_OK,intent1);</span><br><span class="line">       finish();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6）活动的生命周期"><a href="#6）活动的生命周期" class="headerlink" title="6）活动的生命周期"></a>6）活动的生命周期</h3><h4 id="i-返回栈"><a href="#i-返回栈" class="headerlink" title="(i)返回栈"></a>(i)返回栈</h4><p>Android是使用任务（Task）来管理活动的，一个任务就是一组存放在栈里的活动的集合，这个栈，也被称为返回栈（Back Stack)。想象一下栈后进先出的特性，再加上下面这幅图，就不难理解了。</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122200.png" alt="在这里插入图片描述"></p>
+<h4 id="ii-活动状态"><a href="#ii-活动状态" class="headerlink" title="(ii)活动状态"></a>(ii)活动状态</h4><p>每个活动在其生命周期中最多可能会有4种状态。</p>
+<p>1运行状态</p>
+<p>当一个活动位于返回栈的栈顶时,这时活动就处于运行状态。系统最不愿意回收的就是处于运行状态的活动,因为这会带来非常差的用户体验。</p>
+<p>2暂停状态</p>
+<p>当一个活动不再处于栈顶位置,但仍然可见时,这时活动就进入了暂停状态。你可能会觉得既然活动已经不在栈顶了,还怎么会可见呢?这是因为并不是每一个活动都会占满整个屏幕的,比如对话框形式的活动只会占用屏幕中间的部分区域,你很快就会在后面看到这种活动。处于暂停状态的活动仍然是完全存活着的,系统也不愿意去回收这种活动(因为它还是可见的,回收可见的东西都会在用户体验方面有不好的影响),只有在内存极低的情况下,系统才会去考虑回收这种活动。</p>
+<p>3停止状态</p>
+<p>这种活动保存相应的状态和成员变量,但是这并不是完全可靠的,当其他地方需要内存时,处于停止状态的活动有可能会被系统回收。</p>
+<p>4销毁状态</p>
+<p>当一个活动从返回栈中移除后就变成了销毁状态。系统会最倾向于回收处于这种状态的活动,从而保证手机的内存充足。</p>
+<h4 id="iii-活动的生存期"><a href="#iii-活动的生存期" class="headerlink" title="(iii)活动的生存期"></a>(iii)活动的生存期</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> Activity类中定义了7个回调方法,覆盖了活动生命周期的每-一个环节， 下面就来- -- 介绍这7个方法。</span><br><span class="line"> 口onCreate()。这个方法你已经看到过很多次了，每个活动中我们都重写了这个方法，它</span><br><span class="line"> 会在活动第--次被创建的时候调用。你应该在这个方法中完成活动的初始化操作，比如说加载布局、绑定事件等。</span><br><span class="line"> 口onStart()。这个方法在活动由不可见变为可见的时候调用。</span><br><span class="line"> 口onResume()。这个方法在活动准备好和用户进行交互的时候调用。此时的活动一定位于</span><br><span class="line"> 返回栈的栈顶，并且处于运行状态。</span><br><span class="line"> 口onPause()。这个方法在系统准备去启动或者恢复另一个活动的时候调用。我们通常会在这个方法中将一些消耗CPU的资源释放掉，以及保存一些关键数据，但这个方法的执行速度一定要快，不然会影响到新的栈顶活动的使用。</span><br><span class="line"> 口onStop()。这个方法在活动完全不可见的时候调用。它和onPause( )方法的主要区别在</span><br><span class="line"> 于，如果启动的新活动是一个对话框式的活动，那么onPause( )方法会得到执行，而,onStop()方法并不会执行。</span><br><span class="line"> onDestroy()。 这个方法在活动被销毁之前调用，之后活动的状态将变为销毁状态。</span><br><span class="line"> onRestart()。 这个方法在活动由停止状态变为运行状态之前调用，也就是活动被重新启动了。</span><br><span class="line"> </span><br><span class="line"> 以上7个方法中除了onRestart()方法, 其他都是两两相对的，从而又可以将活动分为3种生存期。</span><br><span class="line"> </span><br><span class="line"> 完整生存期。活动在onCreate()方法和onDestroy()方法之间所经历的,就是完整生存期。一般情况下，一个活动会在onCreate()方法中完成各种初始化操作，而在onDestroy()方法中完成释放内存的操作。</span><br><span class="line"></span><br><span class="line">可见生存期。活动在onStart()方法和onStop()方法之间所经历的，就是可见生存期。在可见生存期内，活动对于用户总是可见的，即便有可能无法和用户进行交互。我们可以通过这两个方法，合理地管理那些对用户可见的资源。比如在onStart()方法中对资源进行加载，而在onStop( )方法中对资源进行释放,从而保证处于停止状态的活动不会占用过多内存。</span><br><span class="line"></span><br><span class="line">前台生存期。活动在onResume( )方法和onPause()方法之间所经历的就是前台生存期。在前台生存期内，活动总是处于运行状态的，此时的活动是可以和用户进行交互的，我们平时看到和接触最多的也就是这个状态下的活动。</span><br></pre></td></tr></table></figure>
+
+<p>为了帮助你能够更好地理解，Android 官方提供了一张活动生命周期的示意图</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122214.png" alt="在这里插入图片描述"></p>
+<h4 id="iv-体验一下活动的生命周期"><a href="#iv-体验一下活动的生命周期" class="headerlink" title="(iv)体验一下活动的生命周期"></a>(iv)体验一下活动的生命周期</h4><p>创建了一个项目来详细的体验一下活动的生命周期:<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122231.jpeg" alt="在这里插入图片描述"></p>
+<p>创建一个empty project(我命名为project_testlife），系统会自动帮我们创建布局，如图红色画线（<strong>activity_main.xml</strong>)和活动(如图红色画线<strong>MainActivity</strong>），为了测试我们还需创建如图绿色对勾标记的布局和活动。</p>
+<p><strong>代码如下：</strong></p>
+<p>1）MainActivity</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.project_testlife;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.net.Uri;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"><span class="keyword">import</span> android.view.Menu;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.Button;</span><br><span class="line"><span class="keyword">import</span> android.widget.Toast;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"MainActivity"</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        Button startNormalActivity = (Button) findViewById(R.id.but1);</span><br><span class="line">        Button startDialogActivity = (Button) findViewById(R.id.but2);</span><br><span class="line"></span><br><span class="line">        startNormalActivity.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">                Intent intent_temp = <span class="keyword">new</span> Intent(MainActivity.<span class="keyword">this</span>,NormalAcitivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                startActivity(intent_temp);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        startDialogActivity.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">                Intent intent_temp = <span class="keyword">new</span> Intent(MainActivity.<span class="keyword">this</span>,DialogAcitivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                startActivity(intent_temp);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//几个......</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStart();</span><br><span class="line">        Log.d(TAG,<span class="string">"onStart"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onResume();</span><br><span class="line">        Log.d(TAG,<span class="string">"onResume"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onPause();</span><br><span class="line">        Log.d(TAG,<span class="string">"onPause"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onStop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStop();</span><br><span class="line">        Log.d(TAG,<span class="string">"onStop"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">        Log.d(TAG,<span class="string">"onDestroy"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onRestart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onRestart();</span><br><span class="line">        Log.d(TAG,<span class="string">"onRestart"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2)activity_main.xml布局</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:orientation=<span class="string">"vertical"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;Button</span><br><span class="line">    android:id=<span class="string">"@+id/but1"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"wrap_content"</span></span><br><span class="line">    android:text=<span class="string">"jump to normalactivity"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;Button</span><br><span class="line">        android:id=<span class="string">"@+id/but2"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"wrap_content"</span></span><br><span class="line">        android:text=<span class="string">"jump to dialogactivity"</span>/&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3) 4)NormalAcitivity和DialogAcitivity活动创建就好，不需要写什么代码</p>
+<p>5)activity_normal_acitivity.xml布局文件</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:orientation=<span class="string">"vertical"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span>&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:id=<span class="string">"@+id/nor_textView2"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"61dp"</span></span><br><span class="line">        android:text=<span class="string">"this is normal_activity"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+
+<p>6）activity_diaog_acitivity.xml布局文件</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:orientation=<span class="string">"vertical"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span>&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:id=<span class="string">"@+id/dia_textView2"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"61dp"</span></span><br><span class="line">        android:text=<span class="string">"this is dialog_activity"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+
+<p>7）NormalAcitivity和DialogAcitivity活动对应的布局没有什么不同，NormalAcitivity是一个普通活动；把DialogAcitivity设置成对话框式的活动，这需要在AndroidManifest中完成。</p>
+<p>重点关注下面这段语句：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;activity android:name=<span class="string">".DialogAcitivity"</span></span><br><span class="line">           android:theme="@style/Theme.AppCompat.Dialog"&gt;&lt;/activity&gt;</span><br></pre></td></tr></table></figure>
+
+<p>完整的AndroidManifest代码。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;manifest xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    <span class="keyword">package</span>=<span class="string">"com.example.project_testlife"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;application</span><br><span class="line">        android:allowBackup=<span class="string">"true"</span></span><br><span class="line">        android:icon=<span class="string">"@mipmap/ic_launcher"</span></span><br><span class="line">        android:label=<span class="string">"@string/app_name"</span></span><br><span class="line">        android:roundIcon=<span class="string">"@mipmap/ic_launcher_round"</span></span><br><span class="line">        android:supportsRtl=<span class="string">"true"</span></span><br><span class="line">        android:theme=<span class="string">"@style/AppTheme"</span>&gt;</span><br><span class="line">        &lt;activity android:name=<span class="string">".DialogAcitivity"</span></span><br><span class="line">            android:theme="@style/Theme.AppCompat.Dialog"&gt;&lt;/activity&gt;</span><br><span class="line">        &lt;activity android:name=<span class="string">".NormalAcitivity"</span> /&gt;</span><br><span class="line">        &lt;activity android:name=<span class="string">".MainActivity"</span>&gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action android:name=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span><br><span class="line">                &lt;category android:name=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">        &lt;/activity&gt;</span><br><span class="line">    &lt;/application&gt;</span><br><span class="line"></span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+
+<p>至此，该测试项目就完成了，让我们通过日志来观察下活动的生命历程吧！</p>
+<p>1.运行项目，执行onCreate(),onStart(),on Resume()方法<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122303.jpeg" alt="在这里插入图片描述"></p>
+<p>2.点击第一个按钮，启动NormalAcitivity活动，由于NormalAcitivity把MainActivity完全遮住，所以MainActivity执行了onPause() , onStop()两个方法<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122316.jpeg" alt="在这里插入图片描述"><br>3.按下back键返回MainActivity，因为之前MainActivity进入了停止状态，所以执行了onRestart(), onStart(), onResume()三个方法。<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122325.jpeg" alt="在这里插入图片描述"></p>
+<p>4.点击第二个按钮，启动DialogAcitivity，因为DialogAcitivity没有完全遮住MainActivity，所以MainActivity只是进入暂停状态，并没有停止，所以只执行onPause()<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122336.jpeg" alt="在这里插入图片描述"></p>
+<p>5.按下back键返回MainActivity，因为之前MainActivity进入了暂停状态，所以执行了onResume()方法。<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122346.jpeg" alt="在这里插入图片描述"><br>6.最后按back退出程序，依次执行onPause(), onStart(), onDestroy(), 最终销毁程序（未配图）</p>
+<h1 id="2019-08-18周日-p72-p85"><a href="#2019-08-18周日-p72-p85" class="headerlink" title="2019.08.18周日 p72~p85"></a>2019.08.18周日 p72~p85</h1><h2 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h2><h3 id="1-活动被回收后的恢复工作"><a href="#1-活动被回收后的恢复工作" class="headerlink" title="1.活动被回收后的恢复工作"></a>1.活动被回收后的恢复工作</h3><p>1）onSaveInstanceState()方法</p>
+<h3 id="2-活动的启动模式（重要）"><a href="#2-活动的启动模式（重要）" class="headerlink" title="2.活动的启动模式（重要）"></a>2.活动的启动模式（重要）</h3><h4 id="i-分类："><a href="#i-分类：" class="headerlink" title="(i)分类："></a>(i)分类：</h4><pre><code>启动模式一共有四种，分别是：standard,singleTop,singleTask,singleInstace</code></pre><h4 id="ii-详解"><a href="#ii-详解" class="headerlink" title="(ii)详解"></a>(ii)详解</h4><p>1）standard是活动的默认启动模式，看图理解<br><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20200906122456.png" alt="在这里插入图片描述"><br>2）singleTop</p>
+<p>  可能在有些情况下，你会觉得standard模式不太合理。活动明明已经在栈顶了，为什么再次启动的时候还要创建一个新的活动实例呢?别着急,这只是系统默认的一种启动模式而已，你完全可以根据自己的需要进行修改，比如说使用singleTop 模式。</p>
+<p><strong>当活动的启动模式指定为singleTop,在启动活动时如果发现返回栈的栈顶已经是该活动,则认为可以直接使用它，不会再创建新的活动实例。</strong></p>
+<pre><code>在AndroidManifest中&lt;activity&gt;标签里进行修改</code></pre><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;activity</span><br><span class="line">            android:name=<span class="string">".FirstActivity"</span></span><br><span class="line">            android:label=<span class="string">"@string/first_lablename"</span></span><br><span class="line">            android:launchMode=<span class="string">"singleTop"</span>&gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action android:name=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span><br><span class="line">                &lt;category android:name=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">        &lt;/activity&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3）singleTask</p>
+<pre><code>**使用singleTop模式可以很好地解决重复创建栈顶活动的问题**，但是正如你在上一节所看到的，如果该活动并没有处于栈顶的位置,还是可能会创建多个活动实例的。那么有没有什么办法可以让某个活动**在整个应用程序的上下文中只存在一个实例**呢?这就要借助**singleTask**模式来实现了。当活动的启动模式指定为singleTask, 每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例,如果发现已经存在则直接使用该实例,并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。</code></pre><p>设置方法同singleTop一样。</p>
+<p>4）singleInstance</p>
+<pre><code>它式四个启动模式中最特殊也是最复杂的了！
+
+指定为singleInstance的活动会启动一个新的返回栈来管理这个活动。测试方法为：在三个活动中，将其中一个活动设为singleInstance，并在活动的onCreate()方法里设置相应的工作栈日志打印，来查看当前的活动所使用的栈。</code></pre><p>（我讲的贼简单，尬笑.jpg……)</p>
+<h3 id="3-活动的最佳实践"><a href="#3-活动的最佳实践" class="headerlink" title="3.活动的最佳实践"></a>3.活动的最佳实践</h3><h4 id="i-知晓当前是在哪一个活动"><a href="#i-知晓当前是在哪一个活动" class="headerlink" title="(i)知晓当前是在哪一个活动"></a>(i)知晓当前是在哪一个活动</h4><pre><code>这个在阅读别人的代码时经常需要用到
+
+在com.example.activitytest下创建一个类继承AppCompatActivity类，重写onCreate()f方法，然后让所有的活动都继承你刚刚写的这个类。（这个类的作用就是：在运行某个活动时，能够打印出当前活动的名字）</code></pre><p>如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.activitytest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.Nullable;</span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        <span class="comment">//重点就是这个日志打印信息</span></span><br><span class="line">        Log.d(<span class="string">"BaseActivity"</span>,getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ii-随时随地退出程序"><a href="#ii-随时随地退出程序" class="headerlink" title="(ii)随时随地退出程序"></a>(ii)随时随地退出程序</h4><pre><code>写一个专门的集合类对所有的活动进行管理（我创建的是ActivityCollector），然后在上一部分提到的BaseActivity中调用ActivityCollector的方法，对活动进行管理。</code></pre><p><strong>对于ActivityCollector</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.activitytest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityCollector</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> List&lt;Activity&gt; activities = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addActivity</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        activities.add(activity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeActivity</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        activities.remove(activity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">finishAll</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Activity activity : activities) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!activity.isFinishing()) &#123;</span><br><span class="line">                activity.finish();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>对于BaseActivity</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.Nullable;</span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        Log.d(<span class="string">"BaseActivity"</span>,getClass().getSimpleName());</span><br><span class="line">        ActivityCollector.addActivity(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">        ActivityCollector.removeActivity(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  然后就可以设置按钮……等其他东西，调用ActivityCollector的finishAll()方法，退出程序。</p>
+<pre><code>当然你还可以在销毁所有活动的代码后面再加上杀掉当前进程的代码，以保证程序**完全退出**，杀掉进程的代码如下所示:</code></pre><p>android.os. Process. killProcess (android. os . Process . myPid());</p>
+<pre><code>其中，killProcess()方法用于杀掉一个进程，它接收一个进程id参数，我们可以通过myPid()方法来获得当前程序的进程id。需要注意的是，killProcess()方法只能用于杀掉当前程序的进程，我们不能使用这个方法去杀掉其他程序。</code></pre><h4 id="iii-启动活动的最佳写法"><a href="#iii-启动活动的最佳写法" class="headerlink" title="(iii)启动活动的最佳写法"></a>(iii)启动活动的最佳写法</h4><p>利用模块化思想</p>
+]]></content>
+      <categories>
+        <category>-Android</category>
+      </categories>
+      <tags>
+        <tag>-Android</tag>
+      </tags>
+  </entry>
+</search>

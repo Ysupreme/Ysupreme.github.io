@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maomi-apple.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maomi32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maomi16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-pace-theme-flash.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于嵌入式课程的作业，主要关于启动代码的编写，以及用汇编实现的判断素数、倍数，以及100以内的素数和。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式——汇编代码实现求素数和、判断倍数">
+<meta property="og:url" content="http://yoursite.com/2021/06/10/%E5%B5%8C%E5%85%A5%E5%BC%8F%E2%80%94%E2%80%94%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E6%B1%82%E7%B4%A0%E6%95%B0%E5%92%8C%E3%80%81%E5%88%A4%E6%96%AD%E5%80%8D%E6%95%B0/index.html">
+<meta property="og:site_name" content="Ysupreme">
+<meta property="og:description" content="关于嵌入式课程的作业，主要关于启动代码的编写，以及用汇编实现的判断素数、倍数，以及100以内的素数和。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154443.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154439.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154434.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154428.jpg">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210328153622.png">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210328153618.png">
+<meta property="article:published_time" content="2021-06-10T11:24:34.000Z">
+<meta property="article:modified_time" content="2021-06-10T11:30:26.644Z">
+<meta property="article:author" content="黄勇">
+<meta property="article:tag" content="-嵌入式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154443.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/06/10/%E5%B5%8C%E5%85%A5%E5%BC%8F%E2%80%94%E2%80%94%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E6%B1%82%E7%B4%A0%E6%95%B0%E5%92%8C%E3%80%81%E5%88%A4%E6%96%AD%E5%80%8D%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>嵌入式——汇编代码实现求素数和、判断倍数 | Ysupreme</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ysupreme</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">黄勇的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档<span class="badge">11</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/06/10/%E5%B5%8C%E5%85%A5%E5%BC%8F%E2%80%94%E2%80%94%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E6%B1%82%E7%B4%A0%E6%95%B0%E5%92%8C%E3%80%81%E5%88%A4%E6%96%AD%E5%80%8D%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me_inhuda.JPG">
+      <meta itemprop="name" content="黄勇">
+      <meta itemprop="description" content="放他三千裘马去，不寄俗生。唯贪我三枕黄粱梦。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ysupreme">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          嵌入式——汇编代码实现求素数和、判断倍数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-10 19:24:34 / 修改时间：19:30:26" itemprop="dateCreated datePublished" datetime="2021-06-10T19:24:34+08:00">2021-06-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">-嵌入式</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description">关于嵌入式课程的作业，主要关于启动代码的编写，以及用汇编实现的判断素数、倍数，以及100以内的素数和。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-作业1——启动程序"><a href="#1-作业1——启动程序" class="headerlink" title="1.作业1——启动程序"></a>1.作业1——启动程序</h1><p>1.汇编代码</p>
+<p>1）<font color=red>启动文件，至少需要包含三个段: 堆栈段、中断向量表、代码段,对应于代码中的mstack    RESET    mcode这三个段</font></p>
+<p>2）标号和宏定义需要顶格写，像代码中的stack_start、vectors等就是标号，需要顶格编写</p>
+<p>3）DCD：分配一个或者多个以字为单位的内存，以四字节对齐，并要求初始化这些内存。</p>
+<p>4）EQU:等于指令,把一个符号名称与一个整数表达式或一个任意文本连接起来</p>
+<p>5）中断向量表的第一项必须是栈顶指针的地址 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">;相当于宏定义，指定了栈的大小:512KB</span><br><span class="line">stack_size EQU 0x200	;EQU：等于指令</span><br><span class="line"></span><br><span class="line">;定义一个栈，栈名：mstack，可读可写权限</span><br><span class="line">	AREA mstack, DATA, READWRITE	</span><br><span class="line">stack_start </span><br><span class="line">	SPACE stack_size	;SPACE：用于分配一定大小的内存空间，单位为字节。这里指定大小等于 stack_size。</span><br><span class="line">stack_end</span><br><span class="line">	PRESERVE8	;指定当前文件的堆栈按照 8 字节对齐</span><br><span class="line">	</span><br><span class="line">;定义中断向量表,段名：RESET，只读权限</span><br><span class="line">	AREA RESET, DATA, READONLY	</span><br><span class="line">vectors	;中断向量开始地址</span><br><span class="line">	DCD stack_end	;栈顶指针地址</span><br><span class="line">	DCD test_start	;代码段开始的地址</span><br><span class="line">vectors_end		;中断向量结束地址</span><br><span class="line"></span><br><span class="line">;定义代码段，段名：mycode，只读权限，ALIGN&#x3D;3表示8字节对齐(2^3)</span><br><span class="line">	AREA mycode, CODE, READONLY, ALIGN&#x3D;3</span><br><span class="line">test_start	</span><br><span class="line"></span><br><span class="line">	B . ;while(1)</span><br><span class="line">	END</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="2-作业二——a是b的倍数的汇编代码"><a href="#2-作业二——a是b的倍数的汇编代码" class="headerlink" title="2.作业二——a是b的倍数的汇编代码"></a>2.作业二——a是b的倍数的汇编代码</h1><p>1.C语言代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;返回值1表示是倍数，为0表示不是倍数</span><br><span class="line">int is_multi(int a, int b)&#123;</span><br><span class="line">	int flag &#x3D; 0;</span><br><span class="line">	int temp &#x3D; b;</span><br><span class="line">	while(b&lt;&#x3D;a)&#123;</span><br><span class="line">		if(a&#x3D;&#x3D;b)&#123;</span><br><span class="line">			flag &#x3D; 1;</span><br><span class="line">			break;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			b+&#x3D;temp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.汇编代码实现</p>
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154443.png" alt="image-20210327142811840" style="zoom: 67%;" />
+
+<p>结果1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;34,b&#x3D;6,运行结果R0&#x3D;0,不是倍数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154439.png" alt="image-20210327142554493" style="zoom:67%;" />
+
+<p>结果2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;12,b&#x3D;6,运行结果R0&#x3D;1,是倍数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154434.png" alt="image-20210327142720329" style="zoom:67%;" />
+
+<h1 id="3-作业三——汇编代码判断X是否为素数"><a href="#3-作业三——汇编代码判断X是否为素数" class="headerlink" title="3.作业三——汇编代码判断X是否为素数"></a>3.作业三——汇编代码判断X是否为素数</h1><p>1.C语言代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_prime</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> flag = <span class="number">1</span>;	<span class="comment">//flag=1表示是素数,flag=0表示不是素数</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;x)&#123;</span><br><span class="line">		<span class="keyword">if</span>(is_multi(x,i)==<span class="number">1</span>)&#123;</span><br><span class="line">			flag = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.汇编代码实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">test_start	PROC</span><br><span class="line">	</span><br><span class="line">	MOV R0,#5	;x</span><br><span class="line">	</span><br><span class="line">	BL is_prime</span><br><span class="line">	B . ;while(1)</span><br><span class="line">	ENDP</span><br><span class="line">	END</span><br><span class="line">	</span><br><span class="line">;子过程2——判断是否为素数</span><br><span class="line">is_prime	PROC</span><br><span class="line">	PUSH &#123;R1-R12,LR&#125;</span><br><span class="line">	MOV R2,R0	;参数x--&gt;R1</span><br><span class="line">	MOV R3,#2	;int i &#x3D; 2;</span><br><span class="line">	MOV R0,#1	;int flag &#x3D; 1;</span><br><span class="line">	</span><br><span class="line">loop_isprime</span><br><span class="line">	CMP	R3,R2</span><br><span class="line">	MOVEQ R0,#1</span><br><span class="line">	BGE loop_isprime_end</span><br><span class="line">	MOV R0,R2</span><br><span class="line">	MOV R1,R3</span><br><span class="line">	BL is_multi</span><br><span class="line">	CMP R0,#1</span><br><span class="line">	MOVEQ R0,#0	;if(is_multi(x,i)&#x3D;&#x3D;1)	flag &#x3D; 0;</span><br><span class="line">	BEQ loop_isprime_end</span><br><span class="line">	ADD R3,R3,#1</span><br><span class="line">	BL loop_isprime</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">loop_isprime_end</span><br><span class="line">	POP &#123;R1-R12,PC&#125;</span><br><span class="line">	ENDP</span><br></pre></td></tr></table></figure>
+
+<p>结果1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">输入x&#x3D;12，R0&#x3D;0,表示不是素数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210327154428.jpg" style="zoom:67%;" />
+
+<p>结果2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">输入x&#x3D;5，R0&#x3D;1,表示是素数</span><br></pre></td></tr></table></figure>
+
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210328153622.png" style="zoom:67%;" />
+
+<h1 id="4-作业四——计算1-100以内的素数之和，同时将这些素数存起来"><a href="#4-作业四——计算1-100以内的素数之和，同时将这些素数存起来" class="headerlink" title="4.作业四——计算1-100以内的素数之和，同时将这些素数存起来"></a>4.作业四——计算1-100以内的素数之和，同时将这些素数存起来</h1><p><strong>1.思路如下</strong>：判断 x 是否为比自己小的一个素数的倍数，如果是，则x不是素数，反之。</p>
+<p>2.<strong>C语言代码</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">prime_sum</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	定义一个存放素数的数组:prinme_array;</span></span><br><span class="line"><span class="comment">	表示素数个数的变量:prime_count </span></span><br><span class="line"><span class="comment">	100以内的素数和变量：prime_sum </span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">int</span> prime_array[<span class="number">100</span>] ;</span><br><span class="line">	<span class="keyword">int</span> prime_count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> prime_sum = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//将2放到数组中 </span></span><br><span class="line">	prime_array[prime_count] = <span class="number">2</span>;</span><br><span class="line">	prime_sum +=<span class="number">2</span>;</span><br><span class="line">	prime_count += <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">2</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//便利1-100的每个数 </span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">2</span>; i&lt;<span class="number">100</span>; i++)&#123;	</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j&lt;prime_count;)&#123;</span><br><span class="line">			<span class="keyword">if</span>(is_multi(i,prime_array[j]))	<span class="keyword">break</span>;</span><br><span class="line">			j++;</span><br><span class="line">			<span class="keyword">if</span>(j==prime_count)&#123;</span><br><span class="line">				prime_array[prime_count] = i;</span><br><span class="line">				prime_sum +=i;</span><br><span class="line">				prime_count += <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;	</span><br><span class="line">	<span class="keyword">return</span> prime_sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">;定义数据段，存放素数数组	</span><br><span class="line">	AREA MYDATA, DATA, READWRITE</span><br><span class="line">prime_array</span><br><span class="line">	SPACE	400	;SPACE：用于分配一定大小的内存空间，单位为字节。</span><br><span class="line">prime_array_end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">prime_sum PROC </span><br><span class="line">	PUSH &#123;R1-R12,LR&#125;</span><br><span class="line">	MOV R4,R0		;100--&gt;R4</span><br><span class="line">	MOV R6,#0		;prime_count--&gt;r6</span><br><span class="line">	MOV R5,#0		;sum--&gt;R5</span><br><span class="line">	MOV R7,#2		;i--&gt;R7	</span><br><span class="line">loop1</span><br><span class="line">	CMP R7,R4		;</span><br><span class="line">	BGT loop1_end</span><br><span class="line">	MOV R8,#0		;j&#x3D;0</span><br><span class="line">	</span><br><span class="line">loop2</span><br><span class="line">	CMP R8,R6		</span><br><span class="line">	BEQ	loop2_end		;j&#x3D;prime_count</span><br><span class="line">	MOV R0,R7</span><br><span class="line">	LDR R2,&#x3D;prime_array</span><br><span class="line">	MOV R3,R8,LSL #2</span><br><span class="line">	ADD R3,R2,R3</span><br><span class="line">	LDR R1,[R3]</span><br><span class="line">	BL	is_multi</span><br><span class="line">	CMP R0,#1</span><br><span class="line">	BEQ loop2_end</span><br><span class="line">	ADD R8,R8,#1</span><br><span class="line">	B loop2</span><br><span class="line">	</span><br><span class="line">loop2_end</span><br><span class="line">	CMP R8,R6</span><br><span class="line">	ADDEQ R5,R5,R7		;prime_sum +&#x3D;i</span><br><span class="line">	LDREQ R1,&#x3D;prime_array</span><br><span class="line">	MOVEQ R2,R6,LSL #2</span><br><span class="line">	ADDEQ R1,R1,R2</span><br><span class="line">	STREQ R7,[R1]		;prime_array[prime_count] &#x3D; i</span><br><span class="line">	ADDEQ R6,R6,#1		;prime_count++</span><br><span class="line">	ADD R7,R7,#1		;i++</span><br><span class="line">	B loop1</span><br><span class="line">		</span><br><span class="line">	</span><br><span class="line">loop1_end</span><br><span class="line">	MOV R0,R5</span><br><span class="line">	POP	&#123;R1-R12,PC&#125;</span><br><span class="line">	ENDP</span><br></pre></td></tr></table></figure>
+
+<p>3.运行结果</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20210328153618.png" alt=""></p>
+<p>这里定义了一个数据段prime_array,并用SPACE分配了400byte空间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MOVEQ R2,R6,LSL #2		&#x2F;&#x2F;这里的R6存的是数组中已有的素数的个数</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="5-作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。"><a href="#5-作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。" class="headerlink" title="5.作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。"></a>5.作业五——从第二-四次题设中选择一个，用C与汇编结合的方式实现，并谈谈体验。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">汇编文件 与 C文件共存</span><br><span class="line">第一点：汇编中如何调用C代码</span><br><span class="line">	1.需要在汇编文件，&quot;进口&quot;：引入相应的全局变量名或全局函数， “符号”</span><br><span class="line">			IMPORT  函数名or全局变量名 </span><br><span class="line">	2.直接调用就好</span><br><span class="line">	 BL sum_three</span><br><span class="line">		</span><br><span class="line">	第二点：C文件中如何调用汇编</span><br><span class="line">	1.申明是外部函数 例如：extern int sum_two(int, int);</span><br><span class="line">	2.直接调用汇编过程（写对应的过程名就好）</span><br><span class="line">	3.回到汇编代码中还需要说明该函数是“出口”函数</span><br><span class="line">	需要用EXPORT把相应的全局变量名或全局函数名，导出</span><br><span class="line">	EXPORT sum_two</span><br></pre></td></tr></table></figure>
+
+<p>​    1.本案例编写了一个C语言函数<font color=red>is_primec(int a, int b)</font>,此函数调用了汇编过程<font color=red>is_multi</font>(通过extern导入，同时汇编代码需要通过<font color=red>EXPORT is_multi</font>将该过程导出)；</p>
+<p>在汇编中通过<font color=red>IMPORT is_primec</font>导入该函数，并通过<font color=red>BL is_primec</font>调用该c语言函数</p>
+<p>​    2.汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">	IMPORT is_primec</span><br><span class="line">	EXPORT is_multi</span><br><span class="line">	</span><br><span class="line">	;定义代码段，段名：mycode，只读权限，ALIGN&#x3D;3表示8字节对齐(2^3)</span><br><span class="line">	AREA mycode, CODE, READONLY, ALIGN&#x3D;3</span><br><span class="line">test_start	PROC</span><br><span class="line">	MOV R0,#13</span><br><span class="line">	BL is_primec</span><br><span class="line">	B . ;while(1)</span><br><span class="line">	ENDP</span><br></pre></td></tr></table></figure>
+
+<p>​    3.C语言函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">extern</span> <span class="title">is_multi</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_primec</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> flag = <span class="number">1</span>;	<span class="comment">//flag=1表示是素数,flag=0表示不是素数</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;x)&#123;</span><br><span class="line">		<span class="keyword">if</span>(is_multi(x,i)==<span class="number">1</span>)&#123;</span><br><span class="line">			flag = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>感受：C语言函数和汇编过程相互调用简化了汇编代码的编写！！</p>
+<p>我在写汇编代码时得关注每个寄存器的内容（这里注释很重要），编写很可能出错，不过你也能亲自看到debug过程中寄存器的变化，你不禁也会感叹道“原来真的这么神奇”，同时通过这种方式，你也能看到你的C语言函数是变成了什么样的汇编代码，反过来，促进你的学习啦~~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" rel="tag"># -嵌入式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/" rel="prev" title="数据结构基础">
+      <i class="fa fa-chevron-left"></i> 数据结构基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/06/10/java%E5%9F%BA%E7%A1%80/" rel="next" title="java基础">
+      java基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MTEzMC8yNzYxMQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄勇"
+      src="/images/me_inhuda.JPG">
+  <p class="site-author-name" itemprop="name">黄勇</p>
+  <div class="site-description" itemprop="description">放他三千裘马去，不寄俗生。唯贪我三枕黄粱梦。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ysupreme" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ysupreme" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hy1474705581@gmail.com" title="E-Mail → mailto:hy1474705581@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Jerry75817970" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Jerry75817970" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄勇</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">50k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">45 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+  <script type="text/javascript" src="/js/cursor/firework.js"></script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maomi-apple.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maomi32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maomi16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-pace-theme-flash.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于数据结构的复习内容，包括线性结构——链表、队列、栈；以及非线性结构——树、图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构基础">
+<meta property="og:url" content="http://yoursite.com/2021/07/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Ysupreme">
+<meta property="og:description" content="关于数据结构的复习内容，包括线性结构——链表、队列、栈；以及非线性结构——树、图">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007191203.png">
+<meta property="article:published_time" content="2021-07-01T10:05:19.000Z">
+<meta property="article:modified_time" content="2021-10-07T11:34:36.138Z">
+<meta property="article:author" content="黄勇">
+<meta property="article:tag" content="-数据结构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007191203.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/07/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据结构基础 | Ysupreme</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ysupreme</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">黄勇的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档<span class="badge">11</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/07/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me_inhuda.JPG">
+      <meta itemprop="name" content="黄勇">
+      <meta itemprop="description" content="放他三千裘马去，不寄俗生。唯贪我三枕黄粱梦。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ysupreme">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据结构基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-01 18:05:19" itemprop="dateCreated datePublished" datetime="2021-07-01T18:05:19+08:00">2021-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-07 19:34:36" itemprop="dateModified" datetime="2021-10-07T19:34:36+08:00">2021-10-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">-数据结构</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description">关于数据结构的复习内容，包括线性结构——链表、队列、栈；以及非线性结构——树、图</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="线性数据结构"><a href="#线性数据结构" class="headerlink" title="线性数据结构"></a>线性数据结构</h1><h2 id="1-数组"><a href="#1-数组" class="headerlink" title="1. 数组"></a>1. 数组</h2><p>1）它由相同类型的元素（element）组成，并且是使用一块连续的内存来存储。</p>
+<p>2）数组的特点是：<strong>提供随机访问</strong> 并且容量有限。</p>
+<p>3）考虑插入、删除、查找的时间复杂度</p>
+<h2 id="2-链表"><a href="#2-链表" class="headerlink" title="2.链表"></a>2.链表</h2><p><strong>1常见链表分类：</strong></p>
+<ol>
+<li><p>单链表</p>
+</li>
+<li><p>双向链表</p>
+</li>
+<li><p>循环链表</p>
+</li>
+<li><p>双向循环链表</p>
+<p>头节点、尾节点、后继指针（next）、前继指针（prev）</p>
+</li>
+</ol>
+<h3 id="2-链表特点"><a href="#2-链表特点" class="headerlink" title="2.链表特点"></a>2.链表特点</h3><p>​    优点：可以克服数组需要预先知道数据大小的缺点，链表结构可以充分利用计算机内存空间,实现灵活的内存动态管理（使用的不是连续的内存空间来存储数据）</p>
+<p>​    缺点：链表不会节省空间，相比于数组会占用更多的空间，因为链表中每个节点存放的还有指向其他节点的指针。除此之外，链表不具有数组随机读取的优点。</p>
+<h3 id="4-应用场景"><a href="#4-应用场景" class="headerlink" title="4.应用场景"></a>4.应用场景</h3><p>比如数据元素个数不确定，且需要经常删除添加元素…..</p>
+<p><font color=red>不适用于随机访问情境况</font></p>
+<h3 id="5-数组-vs-链表"><a href="#5-数组-vs-链表" class="headerlink" title="5.数组 vs 链表"></a>5.数组 vs 链表</h3><ul>
+<li>数组支持随机访问，而链表不支持。</li>
+<li>数组使用的是连续内存空间对 CPU 的缓存机制友好，链表则相反。</li>
+<li>数组的大小固定，而链表则天然支持动态扩容。如果声明的数组过小，需要另外申请一个更大的内存空间存放数组元素，然后将原数组拷贝进去，这个操作是比较耗时的！</li>
+</ul>
+<h2 id="3-栈"><a href="#3-栈" class="headerlink" title="3.栈"></a>3.栈</h2><p><strong>栈</strong> (stack)只允许在有序的线性数据集合的一端（称为栈顶 top）进行加入数据（push）和移除数据（pop）。因而按照 <strong>后进先出（LIFO, Last In First Out）</strong> 的原理运作。<strong>在栈中，push 和 pop 的操作都发生在栈顶。</strong></p>
+<h3 id="1-应用场景"><a href="#1-应用场景" class="headerlink" title="1.应用场景"></a>1.应用场景</h3><p>当我们我们要处理的数据只涉及在一端插入和删除数据，并且满足 <strong>后进先出（LIFO, Last In First Out）</strong> 的特性时，我们就可以使用栈这个数据结构。</p>
+<p>比如：</p>
+<h4 id="1-实现浏览器的回退和前进功能"><a href="#1-实现浏览器的回退和前进功能" class="headerlink" title="1.实现浏览器的回退和前进功能"></a>1.实现浏览器的回退和前进功能</h4><p>​    需要两个栈</p>
+<h4 id="2-检查符号是否成对出现"><a href="#2-检查符号是否成对出现" class="headerlink" title="2.检查符号是否成对出现"></a>2.检查符号是否成对出现</h4><p>有效字符串需满足：</p>
+<p>​    左括号必须用相同类型的右括号闭合。</p>
+<p>​    左括号必须以正确的顺序闭合。</p>
+<p>方法</p>
+<ol>
+<li>首先我们将括号间的对应规则存放在 <code>Map</code> 中（比如有哪些括号……)</li>
+<li>创建一个栈。遍历字符串，如果字符是左括号就直接加入<code>stack</code>中，否则将<code>stack</code> 的栈顶元素与这个括号做比较，如果不相等就直接返回 false。遍历结束，如果<code>stack</code>为空(比较左右括号的个数），返回 <code>true</code>。</li>
+</ol>
+<h4 id="3-反转字符串"><a href="#3-反转字符串" class="headerlink" title="3.反转字符串"></a>3.反转字符串</h4><p>将字符串中的每个字符先入栈再出栈就可以了。</p>
+<h4 id="4-维护函数调用"><a href="#4-维护函数调用" class="headerlink" title="4.维护函数调用"></a>4.维护函数调用</h4><p>递归调用</p>
+<p>最后一个被调用的函数必须先完成执行，符合栈的 <strong>后进先出（LIFO, Last In First Out）</strong> 特性。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="2-实现"><a href="#2-实现" class="headerlink" title="2.实现"></a>2.实现</h3><p>主要数组和链表两种方式</p>
+<h2 id="4-队列"><a href="#4-队列" class="headerlink" title="4.队列"></a>4.队列</h2><h3 id="1-队列简介"><a href="#1-队列简介" class="headerlink" title="1. 队列简介"></a>1. 队列简介</h3><p><strong>队列</strong> 是 <strong>先进先出( FIFO，First In, First Out)</strong> 的线性表。在具体应用中通常用链表或者数组来实现，用数组实现的队列叫作 <strong>顺序队列</strong> ，用链表实现的队列叫作 <strong>链式队列</strong> 。<strong>队列只允许在后端（rear）进行插入操作也就是 入队 enqueue，在前端（front）进行删除操作也就是出队 dequeue</strong></p>
+<p>队列的操作方式和堆栈类似，唯一的区别在于队列只允许新数据在后端进行添加。</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20211007191203.png" alt="image-20210630172226089"></p>
+<h3 id="2-分类"><a href="#2-分类" class="headerlink" title="2.分类"></a>2.分类</h3><p>1.单队列——又分为 <strong>顺序队列（数组实现）</strong> 和 <strong>链式队列（链表实现）</strong></p>
+<p>​    1）假溢出情况：明明有位置却不能添加的情况</p>
+<p>​    为了避免当只有一个元素的时候，队头和队尾重合使处理变得麻烦，所以引入两个指针，front 指针指向对头元素，rear 指针指向队列最后一个元素的下一个位置，这样当 front 等于 rear 时，此队列不是还剩一个元素，而是空队列。——From 《大话数据结构》</p>
+<p>在上面的情况中，队列为空的判断：front +1=rearr</p>
+<p>2.循环队列</p>
+<p>​    可以解决顺序队列的假溢出和越界问题。解决办法就是：从头开始，这样也就会形成头尾相接的循环，这也就是循环队列名字的由来。</p>
+<p>还是用上面的图，我们将 rear 指针指向数组下标为 0 的位置就不会有越界问题了。当我们再向队列中添加元素的时候， rear 向后移动。</p>
+<p>顺序队列中，我们说 <code>front==rear</code> 的时候队列为空，循环队列中则不一样，也可能为满，如上图所示。解决办法有两种：</p>
+<ol>
+<li>可以设置一个标志变量 <code>flag</code>,当 <code>front==rear</code> 并且 <code>flag=0</code> 的时候队列为空，当<code>front==rear</code> 并且 <code>flag=1</code> 的时候队列为满。</li>
+<li>队列为空的时候就是 <code>front==rear</code> ，队列满的时候，我们保证数组还有一个空闲的位置，rear 就指向这个空闲位置，如下图所示，那么现在判断队列是否为满的条件就是： <code>(rear+1) % QueueSize= front</code> 。</li>
+</ol>
+<h3 id="3-使用场景"><a href="#3-使用场景" class="headerlink" title="3.使用场景"></a>3.使用场景</h3><p>阻塞队列、消息队列、线程池中的任务/请求队列、生活中的派对，播放器上的播放列表;</p>
+<h1 id="非线性数据结构"><a href="#非线性数据结构" class="headerlink" title="非线性数据结构"></a>非线性数据结构</h1><h2 id="1-堆"><a href="#1-堆" class="headerlink" title="1.堆"></a>1.堆</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>堆是一种满足以下条件的树：</p>
+<p>堆中的每一个节点值都大于等于（或小于等于）子树中所有节点的值。或者说，任意一个节点的值都大于等于（或小于等于）所有子节点的值。</p>
+<p><font color=red><strong>堆不一定是完全二叉树</strong>，只是为了方便存储和索引，我们通常用完全二叉树的形式来表示堆</font></p>
+<p><strong>ps:相对于有序数组而言，堆的主要优势在于更新数据效率较高。</strong> 堆的初始化时间复杂度为 <code>O(nlog(n))</code>，堆可以做到<code>O(1)</code>时间复杂度取出最大值或者最小值，<code>O(log(n))</code>时间复杂度插入或者删除数据</p>
+<h3 id="2-堆的分类"><a href="#2-堆的分类" class="headerlink" title="2.堆的分类"></a>2.堆的分类</h3><p>堆分为 <strong>最大堆</strong> 和 <strong>最小堆</strong>。二者的区别在于节点的排序方式。</p>
+<h3 id="3-堆的存储"><a href="#3-堆的存储" class="headerlink" title="3.堆的存储"></a>3.堆的存储</h3><p>由于完全二叉树的优秀性质，利用数组存储二叉树即节省空间，又方便索引（若根结点的序号为1，那么对于树中任意节点i，其左子节点序号为 <code>2*i</code>，右子节点序号为 <code>2*i+1</code>）</p>
+<h3 id="4-堆的操作总结"><a href="#4-堆的操作总结" class="headerlink" title="4.堆的操作总结"></a>4.堆的操作总结</h3><h4 id="1-插入元素（以最大堆为例）"><a href="#1-插入元素（以最大堆为例）" class="headerlink" title="1)插入元素（以最大堆为例）"></a>1)插入元素（以最大堆为例）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">将要插入的元素放到最后</span><br><span class="line">从底向上，如果父结点比该元素小，则该节点和父结点交换，直到无法交换</span><br></pre></td></tr></table></figure>
+
+<h4 id="2）删除堆顶元素（以最大堆为例）"><a href="#2）删除堆顶元素（以最大堆为例）" class="headerlink" title="2）删除堆顶元素（以最大堆为例）"></a>2）删除堆顶元素（以最大堆为例）</h4><p>删除堆顶元素后，为了保持堆的性质，需要对堆的结构进行调整，我们将这个过程称之为”<strong>堆化</strong>“，堆化的方法分为两种：</p>
+<p>​    一种是<strong>自底向上的堆化</strong>，上述的插入元素所使用的就是自底向上的堆化，元素从最底部向上移动。</p>
+<p>​    另一种是<strong>自顶向下堆化</strong>，元素由最顶部向下移动。在讲解删除堆顶元素的方法时，我将阐述这两种操作的过程，大家可以体会一下二者的不同。</p>
+<p><strong>自底向上的堆化</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">首先删除堆顶元素，使得数组中下标为1的位置空出。</span><br><span class="line">比较根结点的左子节点和右子节点，也就是下标为2,3的数组元素，将较大的元素填充到根结点(下标为1)的位置</span><br><span class="line">一直循环比较空出位置的左右子节点，并将较大者移至空位，直到堆的最底部</span><br></pre></td></tr></table></figure>
+
+<p>完成自底向上的堆化后，没有元素可以填补空缺了，但是，数组中出现了“气泡”，这会导致存储空间的浪费。</p>
+<p><strong>自顶向下堆化</strong></p>
+<p><strong>概括起来：石沉大海</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">第一件事情，就是把石头抬起来，从海面扔下去。这个石头就是堆的最后一个元素，我们将最后一个元素移动到堆顶。</span><br><span class="line">然后开始将这个石头沉入海底，不停与左右子节点的值进行比较，和较大的子节点交换位置，直到无法交换位置。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-操作总结"><a href="#5-操作总结" class="headerlink" title="5.操作总结"></a>5.操作总结</h3><ul>
+<li><strong>插入元素</strong> ：先将元素放至数组末尾，再自底向上堆化，将末尾元素上浮</li>
+<li><strong>删除堆顶元素</strong> ：删除堆顶元素，将末尾元素放至堆顶，再自顶向下堆化，将堆顶元素下沉。也可以自底向上堆化，只是会产生“气泡”，浪费存储空间。最好采用自顶向下堆化的方式。</li>
+</ul>
+<h2 id="2-堆排序"><a href="#2-堆排序" class="headerlink" title="2.堆排序"></a>2.堆排序</h2><p>堆排序的过程分为两步：</p>
+<ul>
+<li>第一步是建堆，将一个无序的数组建立为一个堆</li>
+<li>第二步是排序，将堆顶元素取出，然后对剩下的元素进行堆化，反复迭代，直到所有元素被取出为止。</li>
+</ul>
+<h3 id="1-建堆"><a href="#1-建堆" class="headerlink" title="1.建堆"></a>1.建堆</h3><p>建堆的过程就是一个对所有非叶节点的自顶向下堆化过程。</p>
+<p>非叶节点：最后一个节点的父结点及它之前的元素。也就是说，如果节点个数为n，那么我们需要对n/2到1的节点进行自顶向下（沉底）堆化。</p>
+<p><font color=red>从后往前堆化</font></p>
+<h3 id="2-排序"><a href="#2-排序" class="headerlink" title="2.排序"></a>2.排序</h3><p>将堆顶元素不断取出，放到数组末尾，并对剩下的元素不断堆化。</p>
+<p>现在思考两个问题：</p>
+<ul>
+<li>删除堆顶元素后需要执行自顶向下（沉底）堆化还是自底向上（上浮）堆化？</li>
+<li>取出的堆顶元素存在哪，新建一个数组存？</li>
+</ul>
+<p>1）自顶向下（沉底）</p>
+<p>因为自顶向下堆化的话，最末尾的元素要移到堆顶，这样末尾的位置就空出来了，且不会再被利用，所以可以将取出的堆顶元素放到末尾</p>
+<p><font color=red>相当于堆顶和末尾元素对换位置</font></p>
+<p>2）显而易见，存在原数组</p>
+<h2 id="3-图"><a href="#3-图" class="headerlink" title="3.图"></a>3.图</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h3><p>​    图就是由顶点的有穷非空集合和顶点之间的边组成的集合。通常表示为：<strong>G(V,E)</strong>，其中，G表示一个图，V表示顶点的集合，E表示边的集合。</p>
+<h3 id="2-图的基本概念"><a href="#2-图的基本概念" class="headerlink" title="2.图的基本概念"></a>2.图的基本概念</h3><p>1）顶点</p>
+<p>​    图中的数据元素，我们称之为顶点，图至少有一个顶点（非空有穷集合）</p>
+<p>2）边</p>
+<p>​    顶点之间的关系用边表示。</p>
+<p>3）度</p>
+<p>​    度表示一个顶点包含多少条边，在有向图中，还分为出度和入度，出度表示从该顶点出去的边的条数，入度表示进入该顶点的边的条数。</p>
+<p>4）无向图和有向图</p>
+<p>​    边表示的是顶点之间的关系，有的关系是双向的，比如同学关系，A是B的同学，那么B也肯定是A的同学，那么在表示A和B的关系时，就不用关注方向，用不带箭头的边表示，这样的图就是无向图。</p>
+<p>​    有的关系是有方向的，比如父子关系，师生关系，微博的关注关系，A是B的爸爸，但B肯定不是A的爸爸，A关注B，B不一定关注A。在这种情况下，我们就用带箭头的边表示二者的关系，这样的图就是有向图。</p>
+<p>5）无权图和带权图</p>
+<p>​    对于一个关系，如果我们只关心关系的有无，而不关心关系有多强，那么就可以用无权图表示二者的关系。</p>
+<p>​    对于一个关系，如果我们既关心关系的有无，也关心关系的强度，比如描述地图上两个城市的关系，需要用到距离，那么就用带权图来表示，带权图中的每一条边一个数值表示权值，代表关系的强度。</p>
+<h3 id="3-图的存储"><a href="#3-图的存储" class="headerlink" title="3.图的存储"></a>3.图的存储</h3><h4 id="1）邻接矩阵"><a href="#1）邻接矩阵" class="headerlink" title="1）邻接矩阵"></a>1）邻接矩阵</h4><p>​    <strong>无向图的邻接矩阵是一个对称矩阵，因为在无向图中，顶点i和顶点j有关系，则顶点j和顶点i必有关系。</strong></p>
+<p>​    邻接矩阵存储的方式优点是简单直接（直接使用一个二维数组即可），并且，在获取两个定点之间的关系的时候也非常高效（直接获取指定位置的数组元素的值即可）。但是，这种存储方式的缺点也比较明显，那就是比较浪费空间，</p>
+<h4 id="2）邻接表"><a href="#2）邻接表" class="headerlink" title="2）邻接表"></a>2）邻接表</h4><p>数一数邻接表中所存储的元素的个数以及图中边的条数，你会发现：</p>
+<ul>
+<li>在无向图中，邻接表元素个数等于边的条数的两倍</li>
+<li>在有向图中，邻接表元素个数等于边的条数</li>
+</ul>
+<h3 id="4-图的搜索"><a href="#4-图的搜索" class="headerlink" title="4.图的搜索"></a>4.图的搜索</h3><p>广度优先——使用到了队列</p>
+<p>深度优先——使用到了栈</p>
+<p>本文参考链接：<a href="https://github.com/Snailclimb/JavaGuide" target="_blank" rel="noopener">https://github.com/Snailclimb/JavaGuide</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># -数据结构</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%B8%AA%E4%BA%BA%E5%A4%8D%E4%B9%A0%E7%89%88/" rel="prev" title="数据结构-个人复习版">
+      <i class="fa fa-chevron-left"></i> 数据结构-个人复习版
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/06/10/%E5%B5%8C%E5%85%A5%E5%BC%8F%E2%80%94%E2%80%94%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E6%B1%82%E7%B4%A0%E6%95%B0%E5%92%8C%E3%80%81%E5%88%A4%E6%96%AD%E5%80%8D%E6%95%B0/" rel="next" title="嵌入式——汇编代码实现求素数和、判断倍数">
+      嵌入式——汇编代码实现求素数和、判断倍数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MTEzMC8yNzYxMQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄勇"
+      src="/images/me_inhuda.JPG">
+  <p class="site-author-name" itemprop="name">黄勇</p>
+  <div class="site-description" itemprop="description">放他三千裘马去，不寄俗生。唯贪我三枕黄粱梦。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ysupreme" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ysupreme" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hy1474705581@gmail.com" title="E-Mail → mailto:hy1474705581@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Jerry75817970" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Jerry75817970" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄勇</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">50k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">45 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+  <script type="text/javascript" src="/js/cursor/firework.js"></script>
+</body>
+</html>
