@@ -333,7 +333,7 @@
 <p>可设置<font color=red>日志级别控制、关键字过滤（可正则匹配）</font>，构造丰富的过滤条件</p>
 ]]></content>
       <categories>
-        <category>-Android</category>
+        <category>Android</category>
       </categories>
       <tags>
         <tag>Android</tag>
@@ -975,7 +975,7 @@
 <p>我在写汇编代码时得关注每个寄存器的内容（这里注释很重要），编写很可能出错，不过你也能亲自看到debug过程中寄存器的变化，你不禁也会感叹道“原来真的这么神奇”，同时通过这种方式，你也能看到你的C语言函数是变成了什么样的汇编代码，反过来，促进你的学习啦~~</p>
 ]]></content>
       <categories>
-        <category>-嵌入式</category>
+        <category>嵌入式</category>
       </categories>
       <tags>
         <tag>嵌入式</tag>
@@ -1165,7 +1165,7 @@
 <pre><code>其中，killProcess()方法用于杀掉一个进程，它接收一个进程id参数，我们可以通过myPid()方法来获得当前程序的进程id。需要注意的是，killProcess()方法只能用于杀掉当前程序的进程，我们不能使用这个方法去杀掉其他程序。</code></pre><h4 id="iii-启动活动的最佳写法"><a href="#iii-启动活动的最佳写法" class="headerlink" title="(iii)启动活动的最佳写法"></a>(iii)启动活动的最佳写法</h4><p>利用模块化思想</p>
 ]]></content>
       <categories>
-        <category>-Android</category>
+        <category>Android</category>
       </categories>
       <tags>
         <tag>Android</tag>
@@ -1225,7 +1225,7 @@
 <p>–&gt;</p>
 <img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185745.png" alt="image-20220311165500135" style="zoom:50%;" />]]></content>
       <categories>
-        <category>-设计模式</category>
+        <category>设计模式</category>
       </categories>
       <tags>
         <tag>设计模式</tag>
