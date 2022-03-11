@@ -19,7 +19,8 @@
         <category>-Apollo -无人驾驶</category>
       </categories>
       <tags>
-        <tag>-Apollo -无人驾驶</tag>
+        <tag>Apollo</tag>
+        <tag>无人驾驶</tag>
       </tags>
   </entry>
   <entry>
@@ -56,7 +57,8 @@
         <category>-Apollo -无人驾驶</category>
       </categories>
       <tags>
-        <tag>-Apollo -无人驾驶</tag>
+        <tag>Apollo</tag>
+        <tag>无人驾驶</tag>
       </tags>
   </entry>
   <entry>
@@ -127,7 +129,8 @@
         <category>-Apollo -无人驾驶</category>
       </categories>
       <tags>
-        <tag>-Apollo -无人驾驶</tag>
+        <tag>Apollo</tag>
+        <tag>无人驾驶</tag>
       </tags>
   </entry>
   <entry>
@@ -226,7 +229,8 @@
         <category>-计算机系统基础</category>
       </categories>
       <tags>
-        <tag>数据表示 计算机系统基础</tag>
+        <tag>数据表示</tag>
+        <tag>计算机系统基础</tag>
       </tags>
   </entry>
   <entry>
@@ -268,7 +272,8 @@
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>-[操作系统] -[Linux]</tag>
+        <tag>操作系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -687,7 +692,7 @@
         <category>-java</category>
       </categories>
       <tags>
-        <tag>-java</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -820,7 +825,7 @@
         <category>-数据结构</category>
       </categories>
       <tags>
-        <tag>-数据结构</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -891,7 +896,7 @@
         <category>-数据结构</category>
       </categories>
       <tags>
-        <tag>-数据结构</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -970,7 +975,7 @@
         <category>-嵌入式</category>
       </categories>
       <tags>
-        <tag>-嵌入式</tag>
+        <tag>嵌入式</tag>
       </tags>
   </entry>
   <entry>
@@ -1160,7 +1165,7 @@
         <category>-Android</category>
       </categories>
       <tags>
-        <tag>-Android</tag>
+        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
@@ -1220,7 +1225,7 @@
         <category>-设计模式</category>
       </categories>
       <tags>
-        <tag>-设计模式</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
 </search>
