@@ -16,7 +16,8 @@
 <h2 id="5Apollo团队与架构"><a href="#5Apollo团队与架构" class="headerlink" title="5Apollo团队与架构"></a>5Apollo团队与架构</h2><p> 1.Apollo技术框架层次<br>1）开源软件平台<br>2）云服务平台<br>3）参考车辆平台<br>4）参考硬件平台 </p>
 ]]></content>
       <categories>
-        <category>-Apollo -无人驾驶</category>
+        <category>Apollo</category>
+        <category>无人驾驶</category>
       </categories>
       <tags>
         <tag>Apollo</tag>
@@ -54,7 +55,8 @@
 <p>下一步：扩展单元（AXU），以适用更多开发者</p>
 ]]></content>
       <categories>
-        <category>-Apollo -无人驾驶</category>
+        <category>Apollo</category>
+        <category>无人驾驶</category>
       </categories>
       <tags>
         <tag>Apollo</tag>
@@ -126,7 +128,8 @@
 <p>2）神经网络 </p>
 ]]></content>
       <categories>
-        <category>-Apollo -无人驾驶</category>
+        <category>Apollo</category>
+        <category>无人驾驶</category>
       </categories>
       <tags>
         <tag>Apollo</tag>
@@ -226,7 +229,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>-计算机系统基础</category>
+        <category>计算机系统基础</category>
       </categories>
       <tags>
         <tag>数据表示</tag>
@@ -689,7 +692,7 @@
 
 ]]></content>
       <categories>
-        <category>-java</category>
+        <category>java</category>
       </categories>
       <tags>
         <tag>java</tag>
@@ -822,7 +825,7 @@
 <p>本文参考链接：<a href="https://github.com/Snailclimb/JavaGuide" target="_blank" rel="noopener">https://github.com/Snailclimb/JavaGuide</a></p>
 ]]></content>
       <categories>
-        <category>-数据结构</category>
+        <category>数据结构</category>
       </categories>
       <tags>
         <tag>数据结构</tag>
@@ -893,7 +896,7 @@
 
 <h2 id="4-划分"><a href="#4-划分" class="headerlink" title="4.划分"></a>4.划分</h2>]]></content>
       <categories>
-        <category>-数据结构</category>
+        <category>数据结构</category>
       </categories>
       <tags>
         <tag>数据结构</tag>
@@ -1173,7 +1176,7 @@
     <url>/2022/03/11/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<h1 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h1><p><strong>目的</strong></p>
 <p>一方面需要实现设计方案或者源代码的复用，另 一方面要确保系统能够易于扩展和修改，具有良 好的可维护性</p>
-<p><img src="C:/Users/14747/AppData/Roaming/Typora/typora-user-images/image-20220311161244008.png" alt="image-20220311161244008"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185720.png" alt="image-20220311161244008"></p>
 <h2 id="一-单一职责原则"><a href="#一-单一职责原则" class="headerlink" title="一.单一职责原则"></a>一.单一职责原则</h2><p>最简单的面向对象设计原则，用于控制类的粒度大小</p>
 <p>单一职责原则：一个对象应该只包含单一的职责，并且 职责被完整地封装在一个类中。</p>
 <p>单一职责原则是实现高内聚、低耦合的指导方针</p>
@@ -1207,7 +1210,7 @@
 <p> 合成复用原则分析</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓合成复用原则就是在一个新的对象里通过关联关系（包括组合关系和聚合关系）来使用一些已有的对象，使之成为新对象的一部分</span><br><span class="line">✓新对象通过委派调用已有对象的方法达到复用功能的目的</span><br><span class="line">✓复用时要尽量使用组合&#x2F;聚合关系（关联关系），少用继承</span><br></pre></td></tr></table></figure>
 
-<img src="C:/Users/14747/AppData/Roaming/Typora/typora-user-images/image-20220311165104480.png" alt="image-20220311165104480" style="zoom: 50%;" />
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185736.png" alt="image-20220311165104480" style="zoom: 50%;" />
 
 
 
@@ -1217,10 +1220,10 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> ✓迪米特法则要求一个软件实体应当尽可能少地与其他实体发生相互作用 </span><br><span class="line"> ✓应用迪米特法则可降低系统的耦合度，使类与类之间保持松散的耦合关系</span><br><span class="line"> ✓迪米特法则要求在设计系统时，应该尽量减少对象之间的交互</span><br><span class="line">✓如果两个对象之间不必彼此直接通信，那么这两个对象就不应该发生任何直接的相互作用</span><br><span class="line">✓如果其中一个对象需要调用另一个对象的方法，可以通过“第三者”转发这个调用</span><br><span class="line">✓通过引入一个合理的“第三者”来降低现有对象之间的耦合度</span><br></pre></td></tr></table></figure>
 
 <p>例如，当一个Button被单击时，对应的列表框List、组合框ComboBox、文本框TextBox、文本标签Label等都将发生改变，在初始设计<br>方案中，界面控件之间的交互关系可以简化</p>
-<img src="C:/Users/14747/AppData/Roaming/Typora/typora-user-images/image-20220311165440355.png" alt="image-20220311165440355" style="zoom:50%;" />
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185743.png" alt="image-20220311165440355" style="zoom:50%;" />
 
 <p>–&gt;</p>
-<img src="C:/Users/14747/AppData/Roaming/Typora/typora-user-images/image-20220311165500135.png" alt="image-20220311165500135" style="zoom:50%;" />]]></content>
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185745.png" alt="image-20220311165500135" style="zoom:50%;" />]]></content>
       <categories>
         <category>-设计模式</category>
       </categories>
