@@ -1173,7 +1173,7 @@
   </entry>
   <entry>
     <title>面向对象的设计原则</title>
-    <url>/2022/03/11/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
+    <url>/2022/02/17/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<h1 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h1><p><strong>目的</strong></p>
 <p>一方面需要实现设计方案或者源代码的复用，另 一方面要确保系统能够易于扩展和修改，具有良 好的可维护性</p>
 <p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185720.png" alt="image-20220311161244008"></p>
@@ -1224,6 +1224,134 @@
 
 <p>–&gt;</p>
 <img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220311185745.png" alt="image-20220311165500135" style="zoom:50%;" />]]></content>
+      <categories>
+        <category>设计原则</category>
+      </categories>
+      <tags>
+        <tag>设计原则</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>面向对象的设计模式</title>
+    <url>/2022/02/12/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>设计模式的分类</p>
+<p>总体来说设计模式分为三大类：</p>
+<p>1)创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。</p>
+<p>2)结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。</p>
+<p>3)行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。</p>
+<h1 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h1><p>创建型模式概述</p>
+<p>​    关注对象的创建过程，对类的实例化过程进行抽象，对用户隐藏类的实例的创建细节</p>
+<p><font color=red>创建型模式描述如何将对象的创建和使用分离，让用户 在使用对象时无需关心对象的创建细节，从而降低系统的耦合度，让设计方案更易于修改和扩展</font></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓创建什么(What)</span><br><span class="line">✓由谁创建(Who)</span><br><span class="line">✓何时创建(When)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220312161902.png" alt=""></p>
+<h2 id="一-单例模式"><a href="#一-单例模式" class="headerlink" title="一.单例模式"></a>一.单例模式</h2><p>确保一个类只有一个实例，并提供一个全局访 问点来访问这个唯一实例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> 某个类只能有一个实例</span><br><span class="line"> 必须自行创建这个实例</span><br><span class="line"> 必须自行向整个系统提供这个实例</span><br></pre></td></tr></table></figure>
+
+
+
+<p>1)饿汉式单例类(Eager Singleton)的实现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EagerSingleton</span></span></span><br><span class="line"><span class="class"></span>&#123; <span class="comment">//静态私有成员变量</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> EagerSingleton instance=<span class="keyword">new</span> EagerSingleton ();</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">EagerSingleton</span><span class="params">()</span> <span class="comment">//私有构造函数</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//静态公有工厂方法，返回唯一实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EagerSingleton <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    	<span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>2）懒汉式单例类与双重检查锁定</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazySingleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> LazySingleton instance = <span class="keyword">null</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazySingleton</span><span class="params">()</span> </span>&#123; &#125;<span class="comment">//私有构造函数</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//多个线程同时访问将导致创建多个单例对象！</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">        	instance = <span class="keyword">new</span> LazySingleton();	<span class="comment">//需要较长时间</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>改进：</p>
+<p>1.锁方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">    	instance = <span class="keyword">new</span> LazySingleton();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.锁代码段</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (LazySingleton<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">    	instance = <span class="keyword">new</span> LazySingleton();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3.双重锁定检查</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//第一重判断</span></span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">//锁定代码块</span></span><br><span class="line">    <span class="keyword">synchronized</span> (LazySingleton<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//第二重判断</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">       	  instance = <span class="keyword">new</span> LazySingleton(); <span class="comment">//创建单例实例</span></span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>比较</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">饿汉式单例类与懒汉式单例类比较</span><br><span class="line">饿汉式单例类：</span><br><span class="line">	无须考虑多个线程同时访问的问题；</span><br><span class="line">	调用速度和反应时间优于懒汉式单例；</span><br><span class="line">	资源利用效率不及懒汉式单例；系统加载时间可能会比较长。</span><br><span class="line"></span><br><span class="line">懒汉式单例类：</span><br><span class="line">	实现了延迟加载；</span><br><span class="line">	必须处理好多个线程同时访问的问题；</span><br><span class="line">	需通过双重检查锁定机制进行控制，将导致系统性能受到一定影响</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="二-简单工厂模式"><a href="#二-简单工厂模式" class="headerlink" title="二.简单工厂模式"></a>二.简单工厂模式</h2><p>定义一个工厂类， 它可以根据参数的不同返回不同类的实例，被创建的实例通常都具有共同的父类</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">简单工厂模式的定义</span><br><span class="line">✓在简单工厂模式中用于创建实例的方法通常是静态(static)方法，因此又被称为静态工厂方法(Static Factory Method)模式</span><br><span class="line">✓要点：如果需要什么，只需要传入一个正确的参数，就可以获取所需要的对象，而无须知道其创建细节</span><br><span class="line">✓Parameterized Factory Methods</span><br></pre></td></tr></table></figure>
+
+
+
+<p>模式优点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓实现了对象创建和使用的分离</span><br><span class="line">✓客户端无须知道所创建的具体产品类的类名，只需要知道具体产品类所对应的参数即可</span><br><span class="line">✓通过引入配置文件，可以在不修改任何客户端代码的情况下更换和增加新的具体产品类，在一定程度上提高了系统的灵活性</span><br></pre></td></tr></table></figure>
+
+<p>模式缺点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓ 工厂类集中了所有产品的创建逻辑，职责过重，一旦不能正常工作，整个系统都要受到影响</span><br><span class="line">✓ 增加系统中类的个数（引入了新的工厂类），增加了系统的复杂度和理解难度</span><br><span class="line">✓ 系统扩展困难，一旦添加新产品不得不修改工厂逻辑</span><br><span class="line">✓ 由于使用了静态工厂方法，造成工厂角色无法形成基于继承的等级结构，工厂类不能得到很好地扩展</span><br></pre></td></tr></table></figure>
+
+<p><font color=red>✓ 系统扩展困难，一旦添加新产品不得不修改工厂逻辑</font></p>
+<h2 id="三-工厂方法模式"><a href="#三-工厂方法模式" class="headerlink" title="三.工厂方法模式"></a>三.工厂方法模式</h2><p>工厂方法模式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">• 不再提供一个按钮工厂类来统一负责所有产品的创建，而是将具体按钮的创建过程交给专门的工厂子类去完成</span><br><span class="line">• 如果出现新的按钮类型，只需要为这种新类型的按钮定义一个具体的工厂类就可以创建该新按钮的实例</span><br></pre></td></tr></table></figure>
+
+<p><font color=red>定义一个用于创建对象的接口，但是让子类决定将哪一个类实例化。工厂方法模式让一个类的实例化延迟到其子类。</font>简称为工厂模式</p>
+<p>结构：</p>
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220312161855.png" alt="image-20220311151740239" style="zoom:50%;" />
+
+
+
+<p>模式优点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓工厂方法用来创建客户所需要的产品，同时还向客户隐藏了哪种具体产品类将被实例化这一细节</span><br><span class="line">✓能够让工厂自主确定创建何种产品对象，而如何创建这个对象的细节则完全封装在具体工厂内部</span><br><span class="line">✓在系统中加入新产品时，完全符合开闭原则</span><br></pre></td></tr></table></figure>
+
+<p>模式缺点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓系统中类的个数将成对增加，在一定程度上增加了系统的复杂度，会给系统带来一些额外的开销</span><br><span class="line">✓增加了系统的抽象性和理解难度</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四-抽象工厂模式"><a href="#四-抽象工厂模式" class="headerlink" title="四.抽象工厂模式"></a>四.抽象工厂模式</h2><p>提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。又称为工具(Kit)模式</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220312161845.png" alt="image-20220311154110977"></p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220312161839.png" alt="image-20220311154053542"></p>
+<p><font color=red><strong>更换皮肤，只需修改配置文件</strong></font></p>
+<p><strong>开闭原则</strong></p>
+<p>对于增加新的产品族，抽象工厂模式很好地支持了开 闭原则，只需要增加具体产品并对应增加一个新的具 体工厂，对已有代码无须做任何修改</p>
+<p>对于增加新的产品等级结构，需要修改所有的工厂角 色，包括抽象工厂类，在所有的工厂类中都需要增加 生产新产品的方法，违背了开闭原则</p>
+<h2 id="五-建造者模式"><a href="#五-建造者模式" class="headerlink" title="五.建造者模式"></a>五.建造者模式</h2><h2 id="六-原型模式"><a href="#六-原型模式" class="headerlink" title="六.原型模式"></a>六.原型模式</h2><h1 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h1><h2 id="一-桥接模式"><a href="#一-桥接模式" class="headerlink" title="一.桥接模式"></a>一.桥接模式</h2><p>桥接模式：将抽象部分与它的实现部分解耦，使得两者都能够独立变化。 </p>
+<p>Bridge Pattern: Decouple an abstraction from its implementation so that the two can vary independently</p>
+<p>定义</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓又被称为柄体(Handle and Body)模式或接口(Interface)模式</span><br><span class="line">✓用抽象关联取代了传统的多层继承</span><br><span class="line">✓将类之间的静态继承关系转换为动态的对象组合关系</span><br></pre></td></tr></table></figure>
+
+
+
+<p>案例</p>
+<img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220312161753.png" alt="image-20220312161751980" style="zoom:67%;" />
+
+<p>设计</p>
+<p><img src="https://gitee.com/hy1474705581/mypicbed/raw/master/img/20220312161828.png" alt="image-20220312161822048"></p>
+<p>模式优点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓分离抽象接口及其实现部分 </span><br><span class="line">✓可以取代多层继承方案，极大地减少 了子类的个数 </span><br><span class="line">✓提高了系统的可扩展性，在两个变化维度中任意扩展一个维度，不需要修改原有系统，符合开闭原则</span><br></pre></td></tr></table></figure>
+
+
+
+<p><font color=red>将类之间的静态继承关系转换为动态的 对象组合关系</font></p>
+<p>模式缺点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">✓会增加系统的理解与设计难度，由于关联关系建立在抽象层，要求开发者一开始就针对抽象层进行设计与编程 </span><br><span class="line">✓正确识别出系统中两个独立变化的维度 并不是一件容易的事情</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二-适配器模式"><a href="#二-适配器模式" class="headerlink" title="二.适配器模式"></a>二.适配器模式</h2><h2 id="三-装饰器模式"><a href="#三-装饰器模式" class="headerlink" title="三.装饰器模式"></a>三.装饰器模式</h2><h2 id="四-代理模式"><a href="#四-代理模式" class="headerlink" title="四.代理模式"></a>四.代理模式</h2><h2 id="五-外观模式"><a href="#五-外观模式" class="headerlink" title="五.外观模式"></a>五.外观模式</h2><h2 id="六-组合模式"><a href="#六-组合模式" class="headerlink" title="六.组合模式"></a>六.组合模式</h2><h2 id="七-享元模式"><a href="#七-享元模式" class="headerlink" title="七.享元模式"></a>七.享元模式</h2><h1 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h1><p>共有十一种</p>
+<p>策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模</p>
+<p>详细s后续待补充…</p>
+]]></content>
       <categories>
         <category>设计模式</category>
       </categories>
